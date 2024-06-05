@@ -48,16 +48,24 @@ router.put('/:categoryId',authenticate, authorizeAdmin, async(req,res)=>{
 
     const {categoryId}=req.params
     const {name}=req.body
-    const Existcategory=await Category.findOne({_id:categoryId});
 
-    if(!Existcategory){
-        return res.status(404).json({msg:"category not found"});
-        
+
+    try {
+        const Existcategory=await Category.findOne({_id:categoryId});
+
+        if(!Existcategory){
+            return res.status(404).json({msg:"category not found"});
+            
+        }
+    
+        Existcategory.name=name
+        const updatedCategory=await Existcategory.save();
+        res.json(updatedCategory)
+    } catch (error) {
+        console.error('Update error:', error);
+        res.status(500).json({ error: 'Server error' });
     }
-
-    Existcategory.name=name
-    const updatedCategory=await Existcategory.save();
-    res.json(updatedCategory)
+   
 
 })
 

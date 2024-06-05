@@ -7,6 +7,7 @@ import Profile from './pages/Profile'
 import AdminRoute from './pages/admin/AdminRoute'
 import Userlist from './pages/admin/Userlist'
 import Navigation from './components/Navigation'
+import Categorylist from './pages/admin/Categorylist'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
       {/* admin routes */}
       <Route  element={<AdminRoute />}>
         <Route path='/admin/userlist' element={<Userlist />}/>
+        <Route path='/admin/category' element={<Categorylist />}/>
       </Route>
 
       

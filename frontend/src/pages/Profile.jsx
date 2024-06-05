@@ -5,7 +5,6 @@ import { useProfileMutation } from "../redux/api/userApiSlice";
 import Loader from "../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import { setCredentials } from "../redux/features/auth/authSlice";
-import Navigation from "../components/Navigation";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
