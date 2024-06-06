@@ -8,6 +8,7 @@ import AdminRoute from './pages/admin/AdminRoute'
 import Userlist from './pages/admin/Userlist'
 import Navigation from './components/Navigation'
 import Categorylist from './pages/admin/Categorylist'
+import Productlist from './pages/admin/Productlist'
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       <Route  element={<AdminRoute />}>
         <Route path='/admin/userlist' element={<Userlist />}/>
         <Route path='/admin/category' element={<Categorylist />}/>
+        <Route path='/admin/productlist' element={<Productlist />} />
       </Route>
 
       
