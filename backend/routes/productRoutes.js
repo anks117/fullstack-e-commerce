@@ -7,16 +7,16 @@ import checkIdMiddleware from '../middleware/checkIdMiddleware.js';
 const router=express.Router();
 
 router.post('/',authenticate,authorizeAdmin,async(req,res)=>{
-    const {name,image,brand,category,description,quantity,price}=req.body;
+    const {name,image,brand,category,description,quantity,price,countInStock}=req.body;
 
     try {
         switch (true) {
             case (!name):
                 return res.json({error:"Name is required"});
-            case (!image):
-                return res.json({error:"Image is required"});
             case (!brand):
                 return res.json({error:"Brand is required"});
+            case (!image):
+                return res.json({error:"Image is required"});
             case (!category):
                 return res.json({error:"Category is required"});
             case (!description):
@@ -25,6 +25,8 @@ router.post('/',authenticate,authorizeAdmin,async(req,res)=>{
                 return res.json({error:"Quantity is required"});
             case (!price):
                 return res.json({error:"Price is required"});
+            case (!countInStock):
+                return res.json({error:"CountInStock is required"});
         }
     
         const newProduct=await Product.create({...req.body});
@@ -37,7 +39,7 @@ router.post('/',authenticate,authorizeAdmin,async(req,res)=>{
 })
 
 router.put('/:productid',authenticate,authorizeAdmin,async(req,res)=>{
-    const {name,image,brand,category,description,quantity,price}=req.body;
+    const {name,image,brand,category,description,quantity,price,countInStock}=req.body;
 
     try {
         switch (true) {
@@ -55,9 +57,13 @@ router.put('/:productid',authenticate,authorizeAdmin,async(req,res)=>{
                 return res.json({error:"Quantity is required"});
             case (!price):
                 return res.json({error:"Price is required"});
+            case (!countInStock):
+                return res.json({error:"Stock is required"});
         }
     
-        const updatedProduct=await Product.findByIdAndUpdate(req.params.productid,{...req.body});
+        const updatedProduct=await Product.findByIdAndUpdate(req.params.productid,{
+            name, image, brand, category, description, quantity, price, countInStock
+        });
         await updatedProduct.save()
         res.json(updatedProduct);
     } catch (error) {

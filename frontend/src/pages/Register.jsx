@@ -41,7 +41,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className='container w-[20rem]'>
             <div className='my-[2rem]'>
                     <label htmlFor="name" className='block text-sm font-medium text-white'>
-                        Name
+                        First Name
                     </label>
                     <input type="text" placeholder='name' className='mt-1 p-2 border rounded w-full' value={username} onChange={(e)=>setUsername(e.target.value)}/>
                 </div>

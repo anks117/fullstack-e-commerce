@@ -65,7 +65,7 @@ const Navigation = () => {
             
                 <aside
                     id="sidebar-multi-level-sidebar"
-                    className={`fixed top-0 left-0  w-64 h-screen transition-transform transform ${
+                    className={`fixed top-0 left-0  w-60 h-screen transition-transform transform ${
                         showSidebar ? 'translate-x-0 z-40' : '-translate-x-full '
                     } sm:translate-x-0`}
                     aria-label="Sidebar"
