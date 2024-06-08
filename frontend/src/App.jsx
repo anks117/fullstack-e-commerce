@@ -16,35 +16,34 @@ function App() {
 
   return (
     <BrowserRouter>
+    <div className="flex">
 
-    <div>
-
-    <Navigation />
-    <Routes>
+      <div className="w-60 h-screen">
+        <Navigation />
+      </div>
       
       
-      
-      <Route path='/' element={<HomePage />}/>
-      <Route path='/login' element={<Login />}/>
-      <Route path='/register' element={<Register />} />
-     
+      <div className="flex-1">
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
 
-      {/* Protected routes  */}
-      <Route element={<PrivateRoute />}>
-      <Route path='/profile' element={<Profile />}/>
-      </Route>
+          {/* Protected routes  */}
+          <Route element={<PrivateRoute />}>
+            <Route path='/profile' element={<Profile />} />
+          </Route>
 
-      {/* admin routes */}
-      <Route  element={<AdminRoute />}>
-        <Route path='/admin/userlist' element={<Userlist />}/>
-        <Route path='/admin/category' element={<Categorylist />}/>
-        <Route path='/admin/productlist' element={<Productlist />} />
-      </Route>
-
-      
-    </Routes>
+          {/* admin routes */}
+          <Route element={<AdminRoute />}>
+            <Route path='/admin/userlist' element={<Userlist />} />
+            <Route path='/admin/category' element={<Categorylist />} />
+            <Route path='/admin/productlist' element={<Productlist />} />
+          </Route>
+        </Routes>
+      </div>
     </div>
-    </BrowserRouter>
+  </BrowserRouter>
   )
 }
 

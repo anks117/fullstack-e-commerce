@@ -205,7 +205,7 @@ const Productlist = () => {
     }, []);
 
     return (
-        <div className="pl-[5rem] flex justify-center">
+        <div>
             <ToastContainer />
             <div className="p-4  relative">
                 <div className="flex justify-between items-center m-4">

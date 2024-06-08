@@ -52,10 +52,10 @@ const Profile = () => {
    
   
     return (
-        <div  className="pl-[5rem] flex justify-center">
+        <div>
             <ToastContainer />
-      <div className="container mx-auto p-4 mt-[5rem]">
-        <div className="flex justify-center align-center md:flex md:space-x-4">
+      <div className="container p-4 mt-[5rem] ">
+        <div className="flex justify-center align-center">
           <div className="md:w-1/3">
             <h2 className="text-2xl font-semibold mb-4">Update Profile</h2>
             {loadingUpdateProfile? <Loader />:

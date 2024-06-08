@@ -28,7 +28,7 @@ const Userlist = () => {
     refetch();
   },[refetch])
   return (
-    <div className="pl-[5rem] flex justify-center">
+    <div>
     <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4 flex justify-center">
         Users
