@@ -27,6 +27,16 @@ export const productApiSlice=apiSlice.injectEndpoints({
             query:()=>({
                 url:`${PRODUCT_URL}/allproducts`
             })
+        }),
+        fetchNewProduct:builder.query({
+            query:()=>({
+                url:`${PRODUCT_URL}/new`
+            })
+        }),
+        fetchTopProduct:builder.query({
+            query:()=>({
+                url:`${PRODUCT_URL}/top`
+            })
         })
     })
 })
@@ -35,5 +45,7 @@ export const {
     useCreateProductMutation,
     useUpdateProductMutation,
     useDeleteProductMutation,
-    useFetchAllProductsQuery
+    useFetchAllProductsQuery,
+    useFetchNewProductQuery,
+    useFetchTopProductQuery
 }=productApiSlice
