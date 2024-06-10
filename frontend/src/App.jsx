@@ -18,12 +18,12 @@ function App() {
     <BrowserRouter>
     <div className="flex">
 
-      <div className="w-60 h-screen">
+      <div className='md:w-60'>
         <Navigation />
       </div>
       
       
-      <div className="flex-1">
+      <div className="flex-1 p-4">
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />
