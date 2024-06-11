@@ -1,5 +1,5 @@
 import ProductCard from "./ProductCard"
-import { FaRegCircleRight } from 'react-icons/fa6'
+
 
 
 const TopRatedProducts = ({topProducts}) => {
@@ -24,11 +24,12 @@ const TopRatedProducts = ({topProducts}) => {
             return(
                 <div key={tp._id}>
                     <ProductCard  
+                    tpId={tp._id}
                     tpName={tp.name} 
                     tpImage={tp.image} 
                     tpPrice={tp.price} 
                     tpDescription={tp.description}
-                    height={80}/>
+                    />
                 </div>
                 
             )
