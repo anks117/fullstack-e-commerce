@@ -9,6 +9,8 @@ import Userlist from './pages/admin/Userlist'
 import Navigation from './components/Navigation'
 import Categorylist from './pages/admin/Categorylist'
 import Productlist from './pages/admin/Productlist'
+import Favourite from './pages/Favourite'
+import ProductDetail from './pages/ProductDetail'
 
 
 function App() {
@@ -28,10 +30,12 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/productdetail/:productId' element={<ProductDetail />} />
 
           {/* Protected routes  */}
           <Route element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
+            <Route path='/favourite' element={<Favourite />}/>
           </Route>
 
           {/* admin routes */}
