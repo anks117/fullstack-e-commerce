@@ -2,9 +2,14 @@ import { useState, useEffect } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from "../redux/api/favouriteApiSlice";
+import { useDispatch } from "react-redux";
+import { addFavProduct, removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice";
+import {Link} from 'react-router-dom';
 
 const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
   const [isFav, setIsFav] = useState(false);
+  const dispatch=useDispatch();
+  
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const userId = userInfo._id;
@@ -15,6 +20,7 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
   useEffect(() => {
 
     if (favData) {
+      dispatch(setFavList(favData));
       console.log(favData);
       const favProductIds = favData.map(fav => fav._id);
       setIsFav(favProductIds.includes(productId));
@@ -27,15 +33,17 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
   const handleRemoveFav = async (userId, productId) => {
     try {
       await removeFavApiCall({ userId, productId }).unwrap();
+      dispatch(removeFavProduct(productId))
       setIsFav(false);
     } catch (error) {
       console.log(error);
     }
   }
-
+ 
   const handleAddFav = async (userId, productId) => {
     try {
       await addFavApiCall({ userId, productId }).unwrap();
+      dispatch(addFavProduct({_id:productId}));
       setIsFav(true);
     } catch (error) {
       console.log(error);
@@ -43,13 +51,16 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
   }
 
   return (
+    
     <div className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-72 mb-7">
       <div className={`relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-80`}>
+      <Link to={`/productdetail/${productId}`}>
         <img
           src={tpImage}
           alt={tpName}
           className="object-cover w-full h-full"
         />
+        </Link>
 
         {isFav ?
           <FaHeart
@@ -86,6 +97,7 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
         </button>
       </div>
     </div>
+    
   )
 }
 

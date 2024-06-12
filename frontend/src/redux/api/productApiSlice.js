@@ -37,6 +37,11 @@ export const productApiSlice=apiSlice.injectEndpoints({
             query:()=>({
                 url:`${PRODUCT_URL}/top`
             })
+        }),
+        fetchSingleProduct:builder.query({
+            query:(productid)=>({
+                url:`${PRODUCT_URL}/${productid}`
+            })
         })
     })
 })
@@ -47,5 +52,6 @@ export const {
     useDeleteProductMutation,
     useFetchAllProductsQuery,
     useFetchNewProductQuery,
-    useFetchTopProductQuery
+    useFetchTopProductQuery,
+    useFetchSingleProductQuery
 }=productApiSlice
