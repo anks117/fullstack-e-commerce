@@ -138,7 +138,7 @@ router.get('/new', async(req,res)=>{
 
 router.get('/:productid',async(req,res)=>{
     try {
-        const product=await Product.findById(req.params.productid);
+        const product=await Product.findById(req.params.productid).populate('category');
         
         if(!product){
             return res.json({msg:"Product not found"})

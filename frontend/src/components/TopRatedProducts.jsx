@@ -16,7 +16,7 @@ const TopRatedProducts = ({topProducts}) => {
 
       <div className='flex flex-col justify-start p-4'>
         <h1 className='text-2xl'> Special Products</h1>
-        <hr className='w-1/3 border-2 border-solid border-pink-700'/>
+        <hr className='w-1/3 border-1 border-solid border-pink-700'/>
       </div>
 
       <div className="flex flex-row flex-wrap justify-evenly">
