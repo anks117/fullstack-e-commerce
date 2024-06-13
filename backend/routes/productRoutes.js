@@ -83,23 +83,23 @@ router.delete('/:productid',authenticate,authorizeAdmin,async(req,res)=>{
     }
 })
 
-router.get('/',authenticate,authorizeAdmin, async(req,res)=>{
+router.get('/', async(req,res)=>{
 
 
     try {
-        const pageSize=6
-        const keyword= req.query.keyword
-        ?{name:{$regex:req.query.keyword, $options:'i'}}
-        :{};
+        
+        const {categoryId}= req.query
 
-        const count=await Product.countDocuments({...keyword});
-        const products=await Product.find({...keyword}).limit(pageSize)
-        res.json({
-            products,
-            page:1,
-            pages:Math.ceil(count/pageSize),
-            hasMore:false
-    })
+        let query={}
+
+        if(categoryId){
+            query.category=categoryId;
+        }
+    
+        const products=await Product.find(query).limit(6)
+        res.json(
+            products
+    )
     } catch (error) {
         res.status(500).json({error:"server error"})
     }
