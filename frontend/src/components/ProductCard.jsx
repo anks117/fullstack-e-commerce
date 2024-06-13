@@ -6,44 +6,44 @@ import { useDispatch } from "react-redux";
 import { addFavProduct, removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice";
 import {Link} from 'react-router-dom';
 
-const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
+const ProductCard = ({ tp, h }) => {
   const [isFav, setIsFav] = useState(false);
   const dispatch=useDispatch();
   
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const userId = userInfo._id;
-  const productId = tpId;
+  const productId = tp._id;
 
-  const { data: favData, isLoading, isError } = useFetchFavQuery(userId);
+  const { data: favData, refetch:refetchFavQuery, isLoading, isError } = useFetchFavQuery(userId);
 
   useEffect(() => {
 
     if (favData) {
       dispatch(setFavList(favData));
-      console.log(favData);
       const favProductIds = favData.map(fav => fav._id);
       setIsFav(favProductIds.includes(productId));
     }
+    refetchFavQuery()
   }, [favData, productId]);
 
   const [addFavApiCall] = useAddFavMutation();
   const [removeFavApiCall] = useDeleteFavMutation();
 
-  const handleRemoveFav = async (userId, productId) => {
+  const handleRemoveFav = async (userId, tp) => {
     try {
-      await removeFavApiCall({ userId, productId }).unwrap();
-      dispatch(removeFavProduct(productId))
+      await removeFavApiCall({ userId, productId:tp._id }).unwrap();
+      dispatch(removeFavProduct(tp._id))
       setIsFav(false);
     } catch (error) {
       console.log(error);
     }
   }
  
-  const handleAddFav = async (userId, productId) => {
+  const handleAddFav = async (userId, tp) => {
     try {
-      await addFavApiCall({ userId, productId }).unwrap();
-      dispatch(addFavProduct({_id:productId}));
+      await addFavApiCall({ userId, productId:tp._id }).unwrap();
+      dispatch(addFavProduct(tp));
       setIsFav(true);
     } catch (error) {
       console.log(error);
@@ -53,24 +53,25 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
   return (
     
     <div className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-72 mb-7">
-      <div className={`relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-80`}>
+      <div className={`relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl 
+        h-${h}`}>
       <Link to={`/productdetail/${productId}`}>
         <img
-          src={tpImage}
-          alt={tpName}
+          src={tp.image}
+          alt={tp.name}
           className="object-cover w-full h-full"
         />
         </Link>
 
         {isFav ?
           <FaHeart
-            onClick={() => handleRemoveFav(userId, productId)}
+            onClick={() => handleRemoveFav(userId, tp)}
             className="absolute text-white top-2 right-2"
             size={25}
           />
           :
           <CiHeart
-            onClick={() => handleAddFav(userId, productId)}
+            onClick={() => handleAddFav(userId, tp)}
             className="absolute text-white top-2 right-2"
             size={25}
           />
@@ -79,14 +80,14 @@ const ProductCard = ({ tpId, tpName, tpDescription, tpImage, tpPrice }) => {
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-            {tpName}
+            {tp.name}
           </p>
           <p className="block font-sans rounded-3xl p-3 bg-pink-500 text-base antialiased font-medium leading-relaxed text-gray-100">
-            ₹{tpPrice}
+            ₹{tp.price}
           </p>
         </div>
         <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 hover:text-gray-200 opacity-75">
-          {tpDescription.slice(0, 80) + '...'}
+          {tp.description.slice(0, 80) + '...'}
         </p>
       </div>
       <div className="p-6 pt-0">

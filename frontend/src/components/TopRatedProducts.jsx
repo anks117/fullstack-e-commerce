@@ -24,11 +24,8 @@ const TopRatedProducts = ({topProducts}) => {
             return(
                 <div key={tp._id}>
                     <ProductCard  
-                    tpId={tp._id}
-                    tpName={tp.name} 
-                    tpImage={tp.image} 
-                    tpPrice={tp.price} 
-                    tpDescription={tp.description}
+                    tp={tp}
+                    h={80}
                     />
                 </div>
                 
