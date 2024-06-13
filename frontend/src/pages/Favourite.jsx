@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useDeleteFavMutation, useFetchFavQuery } from "../redux/api/favouriteApiSlice"
-import { useEffect } from "react"
+import { useDeleteFavMutation } from "../redux/api/favouriteApiSlice"
+
 import Loader from "../components/Loader"
 import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
-import { removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice"
+import { removeFavProduct} from "../redux/features/favourite/favouriteSlice"
 
 
 const Favourite = () => {
@@ -12,23 +12,17 @@ const Favourite = () => {
   const userInfo=JSON.parse(localStorage.getItem('userInfo'))
   const userId=userInfo._id
   const [removeFavApiCall]=useDeleteFavMutation()
-  const {data:favProdList, refetch:refetchFavQuery}=useFetchFavQuery(userId);
-  const totalFavourites=useSelector((state)=>state.favourite.totalFavourites)
+  const totalFavourites=useSelector((state)=>state.favourite.totalFavourites);
+  const favouriteList=useSelector((state)=>state.favourite.favouriteList)
   const dispatch=useDispatch();
 
-  useEffect(()=>{
-    if(favProdList){
-      dispatch(setFavList(favProdList));
-    }
-    refetchFavQuery()
-  },[refetchFavQuery,favProdList])
+  
 
-  const handleRemove=async(userId,productId)=>{
+  const handleRemove=async(userId,prod)=>{
     try {
-      await removeFavApiCall({userId,productId}).unwrap();
+      await removeFavApiCall({userId,productId:prod._id}).unwrap();
       toast.warning("Removed from favourite list")
-      dispatch(removeFavProduct(productId));
-      refetchFavQuery();
+      dispatch(removeFavProduct(prod._id))
 
       
     } catch (error) {
@@ -38,7 +32,7 @@ const Favourite = () => {
 
  
 
-  if(!favProdList){
+  if(!favouriteList){
     return <Loader />
   }
 
@@ -54,7 +48,7 @@ const Favourite = () => {
 
       <div className="flex flex-row flex-wrap justify-evenly">
         {
-          favProdList && favProdList.map((prod)=>{
+          favouriteList && favouriteList.map((prod)=>{
             return(
               <div key={prod._id} 
               className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-80 mb-7">
@@ -85,7 +79,7 @@ const Favourite = () => {
               <div className="flex justify-around p-6 pt-0">
 
               <button
-                onClick={()=>handleRemove(userId,prod._id)}
+                onClick={()=>handleRemove(userId,prod)}
                   className="align-middle bg-red-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-2 rounded-lg shadow-red-950 hover:shadow-red-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-1/3 bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none"
                   type="button">
                   Remove
