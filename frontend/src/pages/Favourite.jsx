@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useDeleteFavMutation } from "../redux/api/favouriteApiSlice"
-
-import Loader from "../components/Loader"
 import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
 import { removeFavProduct} from "../redux/features/favourite/favouriteSlice"
@@ -30,11 +28,7 @@ const Favourite = () => {
     }
   }
 
- 
 
-  if(!favouriteList){
-    return <Loader />
-  }
 
   return (
     <div>
@@ -46,7 +40,8 @@ const Favourite = () => {
         <hr className='w-1/3 border-1 border-solid border-pink-700'/>
       </div>
 
-      <div className="flex flex-row flex-wrap justify-evenly">
+      {totalFavourites >0?
+        <div className="flex flex-row flex-wrap justify-evenly">
         {
           favouriteList && favouriteList.map((prod)=>{
             return(
@@ -97,6 +92,13 @@ const Favourite = () => {
         }
         
       </div>
+      :
+      <div className="bg-gray-900 w-3/4 h-60 flex justify-center align-middle">
+        <h1 className="text-gray-100">Your Favourite list is Empty!</h1>
+      </div>
+        }
+
+      
       
     </div>
     </div>

@@ -1,7 +1,5 @@
 import ProductCard from "./ProductCard"
 
-
-
 const TopRatedProducts = ({topProducts}) => {
 
     if(!Array.isArray(topProducts) || topProducts.length===0){
@@ -25,7 +23,6 @@ const TopRatedProducts = ({topProducts}) => {
                 <div key={tp._id}>
                     <ProductCard  
                     tp={tp}
-                    h={80}
                     />
                 </div>
                 

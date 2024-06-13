@@ -10,13 +10,14 @@ const HomePage = () => {
   
   useEffect(()=>{
     refetchNewProducts();
-  },[newProducts])
+    refetchTopProducts
+  },[newProducts,topProducts])
 
   
   return (
       <div className=" space-y-16 p-4">
         <Header newProducts={newProducts}/>
-        <TopRatedProducts topProducts={topProducts}/>
+        <TopRatedProducts topProducts={topProducts} />
       </div>
     
   )

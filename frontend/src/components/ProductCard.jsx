@@ -4,78 +4,73 @@ import { FaHeart } from "react-icons/fa";
 import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from "../redux/api/favouriteApiSlice";
 import { useDispatch } from "react-redux";
 import { addFavProduct, removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const ProductCard = ({ tp, h }) => {
+const ProductCard = ({ tp }) => {
   const [isFav, setIsFav] = useState(false);
-  const dispatch=useDispatch();
-  
+  const dispatch = useDispatch();
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  const userId = userInfo._id;
+  const userId = userInfo?._id;
   const productId = tp._id;
 
-  const { data: favData, refetch:refetchFavQuery, isLoading, isError } = useFetchFavQuery(userId);
+  const { data: favData, refetch: refetchFavQuery } = useFetchFavQuery(userId);
 
   useEffect(() => {
-
     if (favData) {
       dispatch(setFavList(favData));
-      const favProductIds = favData.map(fav => fav._id);
-      setIsFav(favProductIds.includes(productId));
+      setIsFav(favData.some(fav => fav._id === productId));
     }
-    refetchFavQuery()
-  }, [favData, productId]);
+    refetchFavQuery();
+  }, [favData, productId, dispatch]);
 
   const [addFavApiCall] = useAddFavMutation();
   const [removeFavApiCall] = useDeleteFavMutation();
 
-  const handleRemoveFav = async (userId, tp) => {
+  const handleRemoveFav = async () => {
     try {
-      await removeFavApiCall({ userId, productId:tp._id }).unwrap();
-      dispatch(removeFavProduct(tp._id))
+      await removeFavApiCall({ userId, productId }).unwrap();
+      dispatch(removeFavProduct(productId));
       setIsFav(false);
     } catch (error) {
       console.log(error);
     }
-  }
- 
-  const handleAddFav = async (userId, tp) => {
+  };
+
+  const handleAddFav = async () => {
     try {
-      await addFavApiCall({ userId, productId:tp._id }).unwrap();
+      await addFavApiCall({ userId, productId }).unwrap();
       dispatch(addFavProduct(tp));
       setIsFav(true);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
-    
     <div className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-72 mb-7">
       <div className={`relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl 
-        h-${h}`}>
-      <Link to={`/productdetail/${productId}`}>
-        <img
-          src={tp.image}
-          alt={tp.name}
-          className="object-cover w-full h-full"
-        />
+        h-80`}>
+        <Link to={`/productdetail/${productId}`}>
+          <img
+            src={tp.image}
+            alt={tp.name}
+            className="object-cover w-full h-full"
+          />
         </Link>
-
-        {isFav ?
+        {isFav ? (
           <FaHeart
-            onClick={() => handleRemoveFav(userId, tp)}
+            onClick={handleRemoveFav}
             className="absolute text-white top-2 right-2"
             size={25}
           />
-          :
+        ) : (
           <CiHeart
-            onClick={() => handleAddFav(userId, tp)}
+            onClick={handleAddFav}
             className="absolute text-white top-2 right-2"
             size={25}
           />
-        }
+        )}
       </div>
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
@@ -93,13 +88,13 @@ const ProductCard = ({ tp, h }) => {
       <div className="p-6 pt-0">
         <button
           className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-          type="button">
+          type="button"
+        >
           Add to Cart
         </button>
       </div>
     </div>
-    
-  )
-}
+  );
+};
 
 export default ProductCard;

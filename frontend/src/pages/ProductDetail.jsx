@@ -1,20 +1,33 @@
 
-import { useParams } from 'react-router-dom'
-import { useFetchSingleProductQuery } from '../redux/api/productApiSlice';
+import { Link, useParams } from 'react-router-dom'
+import { useFetchRelatedProductsQuery, useFetchSingleProductQuery } from '../redux/api/productApiSlice';
 import Loader from '../components/Loader';
+import { useEffect, useState } from 'react';
 
 const ProductDetail = () => {
   const {productId}=useParams();
+  const [showReviews,setShowReviews]=useState(false);
+  const [relatedProduct,setRelatedProduct]=useState('');
   
-
- 
   const {data:productDetail}=useFetchSingleProductQuery(productId);
-  
+
+  let categoryId;
   let descriptionArray;
+
+
   if(productDetail){
     descriptionArray=productDetail.description.split("\n");
+    categoryId=productDetail.category._id;
   }
   
+  const {data:relatedProducts, refetch:refetchRelatedProducts}=useFetchRelatedProductsQuery(categoryId);
+  
+  useEffect(()=>{
+    if(relatedProducts){
+        setRelatedProduct(relatedProducts)
+    }
+    refetchRelatedProducts()
+  },[refetchRelatedProducts,relatedProducts])
 
   if(!productDetail){
     return <Loader />
@@ -22,77 +35,127 @@ const ProductDetail = () => {
 
   return (
     
-    <div>
-      <div className="font-sans">
-          <div className="p-4 lg:max-w-5xl max-w-lg mx-auto">
-              <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 max-lg:gap-12">
-
-                  <div className="w-full lg:sticky top-0 sm:flex gap-2">
-                      
-                      <img src={productDetail.image} alt="Product" className="h-96 rounded-md object-cover" />
+    <div className="font-sans px-4 sm:px-6 lg:px-8">
+  <div className="p-4 lg:max-w-5xl max-w-96 mx-auto">
+    <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 max-lg:gap-12">
+      <div className="w-full lg:sticky top-0 sm:flex justify-center lg:justify-start gap-2">
+        <img src={productDetail.image} alt="Product" className="h-96 rounded-md object-cover" />
+      </div>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-100">
+          {productDetail.name} | {productDetail.category.name}
+        </h2>
+        <div className="flex flex-wrap gap-4 mt-4">
+          <p className="text-gray-100 text-xl font-bold">₹ {productDetail.price}</p>
+          <p className="text-gray-400 text-xl">
+            <strike>{productDetail.price + 1000}</strike>
+            <span className="text-sm ml-1.5">Tax included</span>
+          </p>
+        </div>
+        <div className="flex space-x-2 mt-4">
+          <span className="text-lg text-gray-200">{Math.round(productDetail.rating * 10) / 10}</span>
+          <svg className="w-5 fill-yellow-400" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+          </svg>
+          <div className="text-lg text-gray-200">| {productDetail.reviews.length}</div>
+        </div>
+        <button
+          type="button"
+          className="w-full mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
+        >
+          Add to cart
+        </button>
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-gray-100">About the item</h3>
+          <ul className="space-y-3 list-disc mt-4 pl-4 text-sm text-gray-100">
+            {descriptionArray.map((des, idx) => (
+              <li key={idx}>{des}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-gray-100">Reviews({productDetail.reviews.length})</h3>
+          <button
+            onClick={() => setShowReviews(!showReviews)}
+            type="button"
+            className="w-full mt-8 px-6 py-2.5 border border-pink-500 bg-transparent hover:border-pink-700 text-gray-100 text-sm font-semibold rounded-md"
+          >
+            {showReviews ? "Hide Reviews" : "Read all reviews"}
+          </button>
+        </div>
+        {showReviews && (
+          <div className="mt-8 h-40 overflow-y-scroll backdrop-filter backdrop-blur-lg border border-gray-300 rounded-md">
+            <ul className="mt-2 ml-2">
+              {productDetail.reviews.map((rev) => (
+                <li key={rev._id} className="mt-2">
+                  <div className="flex align-middle">
+                    <div className="w-5 h-5 rounded-full flex justify-center bg-slate-600 text-gray-300">
+                      {rev.name[0]}
+                    </div>
+                    <span className="ml-2 text-sm text-white">{rev.name}</span>
                   </div>
-
-                  <div>
-                      <h2 className="text-2xl font-bold text-gray-100">{productDetail.name} | {productDetail.category.name}</h2>
-                      <div className="flex flex-wrap gap-4 mt-4">
-                          <p className="text-gray-100 text-xl font-bold">₹ {productDetail.price}</p>
-                          <p className="text-gray-400 text-xl"><strike>{productDetail.price + 1000}</strike> <span className="text-sm ml-1.5">Tax included </span></p>
-                      </div>
-
-                      <div className="flex space-x-2 mt-4">
-                          <svg className="w-5 fill-yellow-400" viewBox="0 0 14 13" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                  d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                          </svg>
-                          <svg className="w-5 fill-yellow-400" viewBox="0 0 14 13" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                  d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                          </svg>
-                          <svg className="w-5 fill-yellow-400" viewBox="0 0 14 13" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                  d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                          </svg>
-                          <svg className="w-5 fill-yellow-400" viewBox="0 0 14 13" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                  d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                          </svg>
-                          <svg className="w-5 fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
-                              xmlns="http://www.w3.org/2000/svg">
-                              <path
-                                  d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                          </svg>
-                      </div>
-
-                    
-
-                      <button type="button" className="w-full mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md">Add to cart</button>
-
-                      <div className="mt-8">
-                          <h3 className="text-xl font-bold text-gray-100">About the item</h3>
-                          <ul className="space-y-3 list-disc mt-4 pl-4 text-sm text-gray-100">
-                            {descriptionArray.map((des,idx)=>{
-                                return(
-                                    <li key={idx}>{des}</li>
-                                )
-                            })}
-                              
-                             
-                          </ul>
-                      </div>
-
-                      <div className="mt-8">
-                          <h3 className="text-xl font-bold text-gray-100">Reviews({productDetail.reviews.length})</h3>
-                          <button type="button" className="w-full mt-8 px-6 py-2.5 border border-pink-500 bg-transparent hover:border-pink-700 text-gray-100 text-sm font-semibold rounded-md">Read all reviews</button>
-                      </div>
+                  <div className="ml-7 text-xs text-gray-600">
+                    Rating:- <span className="text-white">{rev.rating}/5</span>
                   </div>
-              </div>
+                  <div className="ml-7 mt-1 text-white text-xs">{rev.comment}</div>
+                  <div className="mt-2 flex justify-center">
+                    <hr className="justify-center border-gray-600 w-5/6" />
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
+        )}
       </div>
     </div>
+    <div className="m-auto py-4 px-4 ">
+      <div className="flex flex-col justify-start p-4">
+        <h1 className="text-2xl">Related Products</h1>
+        <hr className="w-60 md:w-1/3 border-1 border-solid border-pink-700" />
+      </div>
+      <div className="md:w-full flex overflow-x-scroll ">
+        {!relatedProduct ? (
+          <Loader />
+        ) : (
+          relatedProduct.map((rp) => (
+            <div
+              key={rp._id}
+              className="w-62 md:w-96 flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl mb-7 mx-4">
+            
+              <div className="w-60 mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-48">
+                <Link to={`/productdetail/${rp._id}`}>
+                  <img src={rp.image} alt={rp.name} className="object-cover w-full h-full" />
+                </Link>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
+                    {rp.name}
+                  </p>
+                  <p className="block font-sans rounded-3xl p-3 bg-pink-500 text-base antialiased font-medium leading-relaxed text-gray-100">
+                    ₹{rp.price}
+                  </p>
+                </div>
+                <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 hover:text-gray-200 opacity-75">
+                  {rp.description.slice(0, 20) + '...'}
+                </p>
+              </div>
+              <div className="flex justify-around p-6 pt-0">
+                <button
+                  className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+                  type="button"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
   )
 }
 
