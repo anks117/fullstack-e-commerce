@@ -1,15 +1,36 @@
 
 import { Link, useParams } from 'react-router-dom'
-import { useFetchRelatedProductsQuery, useFetchSingleProductQuery } from '../redux/api/productApiSlice';
+import { useAddProductReviewMutation, useFetchRelatedProductsQuery, useFetchSingleProductQuery } from '../redux/api/productApiSlice';
 import Loader from '../components/Loader';
 import { useEffect, useState } from 'react';
+import ReviewModal from '../components/ReviewModal';
+import { ToastContainer, toast } from 'react-toastify'
+import FavouriteButton from '../components/FavouriteButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from '../redux/api/favouriteApiSlice';
+import { addFavProduct, removeFavProduct, setFavList } from '../redux/features/favourite/favouriteSlice';
 
 const ProductDetail = () => {
-  const {productId}=useParams();
+
+  const [isFav,setIsFav]=useState(false);
   const [showReviews,setShowReviews]=useState(false);
   const [relatedProduct,setRelatedProduct]=useState('');
+  const [rating,setRating]=useState('');
+  const [comment,setComment]=useState('');
+  const [showReviewModal,setShowReviewModal]=useState(false);
+
+  const favouriteList=useSelector((state)=>state.favourite.favouriteList);
+  const dispatch=useDispatch();
   
-  const {data:productDetail}=useFetchSingleProductQuery(productId);
+  const {productId}=useParams();
+
+  const userInfo=JSON.parse(localStorage.getItem('userInfo'));
+  const userId=userInfo?._id
+
+  const {data:productDetail, refetch:refetchSingleProductDetail}=useFetchSingleProductQuery(productId);
+  const [addReviewProdApiCall]=useAddProductReviewMutation();
+  const [addFavApiCall]=useAddFavMutation()
+  const [deleteFavApiCall]=useDeleteFavMutation();
 
   let categoryId;
   let descriptionArray;
@@ -21,13 +42,59 @@ const ProductDetail = () => {
   }
   
   const {data:relatedProducts, refetch:refetchRelatedProducts}=useFetchRelatedProductsQuery(categoryId);
+  const {data:favData,refetch:refetchFavProduct}=useFetchFavQuery(userId)
+
+  const addReviewProd = async () => {
+
+    const review = {
+      rating,
+      comment,
+    };
+    
+    try {
+      await addReviewProdApiCall({ productid:productId, review }).unwrap();
+      toast.success("Review added");
+      setShowReviewModal(false);
+      refetchSingleProductDetail();
+    } catch (error) {
+      toast.error(error?.data?.message || error?.data?.msg);
+    }
+  };
+
+  const addThisFavProduct=async()=>{
+    try {
+      await addFavApiCall({userId,productId}).unwrap();
+      dispatch(addFavProduct(productDetail));
+      refetchFavProduct();
+      setIsFav(true);
+
+    } catch (error) {
+      toast.error('error in adding fav')
+    }
+  }
+
+  const removeThisFavProduct=async()=>{
+    try {
+      await deleteFavApiCall({userId,productId}).unwrap();
+      dispatch(removeFavProduct(productId));
+      refetchFavProduct();
+      setIsFav(false);
+    } catch (error) {
+      toast.error('error in removing product')
+    }
+  }
+  
   
   useEffect(()=>{
     if(relatedProducts){
         setRelatedProduct(relatedProducts)
     }
-    refetchRelatedProducts()
-  },[refetchRelatedProducts,relatedProducts])
+    if(favData){
+      dispatch(setFavList(favData));
+      setIsFav(favData.some((fd)=>fd._id===productId))
+    }
+    refetchFavProduct()
+  },[relatedProducts,favData,productId]);
 
   if(!productDetail){
     return <Loader />
@@ -36,6 +103,7 @@ const ProductDetail = () => {
   return (
     
     <div className="font-sans px-4 sm:px-6 lg:px-8">
+      <ToastContainer />
   <div className="p-4 lg:max-w-5xl max-w-96 mx-auto">
     <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 max-lg:gap-12">
       <div className="w-full lg:sticky top-0 sm:flex justify-center lg:justify-start gap-2">
@@ -59,12 +127,24 @@ const ProductDetail = () => {
           </svg>
           <div className="text-lg text-gray-200">| {productDetail.reviews.length}</div>
         </div>
+
+        <div className='grid grid-cols-3 gap-4'>
+
         <button
           type="button"
-          className="w-full mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
+          className="col-span-2 mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
         >
           Add to cart
         </button>
+        
+        <FavouriteButton 
+        setIsFav={setIsFav} 
+        isFav={isFav}
+        addThisFavProduct={addThisFavProduct}
+        removeThisFavProduct={removeThisFavProduct}/>
+
+        </div>
+
         <div className="mt-8">
           <h3 className="text-xl font-bold text-gray-100">About the item</h3>
           <ul className="space-y-3 list-disc mt-4 pl-4 text-sm text-gray-100">
@@ -74,7 +154,25 @@ const ProductDetail = () => {
           </ul>
         </div>
         <div className="mt-8">
+          <div className='flex justify-between'>
           <h3 className="text-xl font-bold text-gray-100">Reviews({productDetail.reviews.length})</h3>
+
+          <button className='p-1 rounded-md bg-pink-600 text-white shadow-sm'
+          onClick={()=>setShowReviewModal(true)}>
+            Add review
+          </button>
+          </div>
+
+         {showReviewModal && 
+         <ReviewModal
+         setShowReviewModal={setShowReviewModal}
+         rating={rating}
+         setRating={setRating}
+         comment={comment}
+         setComment={setComment}
+         showReviewModal={showReviewModal}
+         addReviewProd={addReviewProd} />}
+          
           <button
             onClick={() => setShowReviews(!showReviews)}
             type="button"
@@ -130,7 +228,7 @@ const ProductDetail = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-                    {rp.name}
+                    {rp.name.slice(0,20)}...
                   </p>
                   <p className="block font-sans rounded-3xl p-3 bg-pink-500 text-base antialiased font-medium leading-relaxed text-gray-100">
                     ₹{rp.price}

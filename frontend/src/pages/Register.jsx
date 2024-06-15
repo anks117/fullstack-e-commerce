@@ -30,10 +30,11 @@ const Register = () => {
     }
 
   return (
-    <div>
+    <div className=" bg-center min-h-screen flex items-center justify-center " style={{ backgroundImage: 'url("https://images.pexels.com/photos/11396009/pexels-photo-11396009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
+      <div className="absolute bg-black opacity-50 backdrop-filter backdrop-blur-lg"></div>
         
-    <div className='pl-[5rem] flex justify-center'>
-        <div className="mr-[4rem] mt-[5rem]">
+    <div className=' flex justify-center'>
+        <div className="bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 rounded-lg mr-[4rem] mt-[5rem] p-6 ">
             <h1 className='text-2xl font-semibold mb-4'>
                 Sign-up
             </h1>

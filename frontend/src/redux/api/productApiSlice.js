@@ -10,6 +10,14 @@ export const productApiSlice=apiSlice.injectEndpoints({
                 body:data,
             })
         }),
+        addProductReview: builder.mutation({
+            query: ({ productid, review }) => ({
+              url: `${PRODUCT_URL}/${productid}/review`,
+              method: "POST",
+              body:review,
+            }),
+          }),
+        
         updateProduct:builder.mutation({
             query:({productid,updatedProduct})=>({
                 url:`${PRODUCT_URL}/${productid}`,
@@ -47,7 +55,8 @@ export const productApiSlice=apiSlice.injectEndpoints({
             query:(categoryId)=>({
                 url:`${PRODUCT_URL}/?categoryId=${categoryId}`
             })
-        })
+        }),
+        
     })
 })
 
@@ -59,5 +68,6 @@ export const {
     useFetchNewProductQuery,
     useFetchTopProductQuery,
     useFetchSingleProductQuery,
-    useFetchRelatedProductsQuery
+    useFetchRelatedProductsQuery,
+    useAddProductReviewMutation
 }=productApiSlice

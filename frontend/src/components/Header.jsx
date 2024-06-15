@@ -35,7 +35,7 @@ const Header = ({ newProducts }) => {
         <div className='absolute fixed bottom-2 flex flex-col space-y-7 p-7'>
           <span className='text-xl text-white'>{newProducts[currIndex].name}</span>
           <span className='text-xl text-white'>{newProducts[currIndex].description.slice(0, 50)}...</span>
-          <Link to={`/product/${newProducts[currIndex].id}`}>
+          <Link to={`/productdetail/${newProducts[currIndex]._id}`}>
             <button className="text-white inline-flex items-center bg-pink-600 hover:bg-pink-800 font-medium rounded-3xl text-sm px-5 py-2.5 text-center">
               See more
             </button>
