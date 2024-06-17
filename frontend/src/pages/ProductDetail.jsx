@@ -6,20 +6,24 @@ import { useEffect, useState } from 'react';
 import ReviewModal from '../components/ReviewModal';
 import { ToastContainer, toast } from 'react-toastify'
 import FavouriteButton from '../components/FavouriteButton';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from '../redux/api/favouriteApiSlice';
 import { addFavProduct, removeFavProduct, setFavList } from '../redux/features/favourite/favouriteSlice';
+import { useAddCartProductMutation, useFetchCartProductsQuery } from '../redux/api/cartApiSlice';
+import { setCartProducts } from '../redux/features/cart/cartSlice';
 
 const ProductDetail = () => {
 
   const [isFav,setIsFav]=useState(false);
+  const [isCartProd,setIsCartProd]=useState(false);
+
   const [showReviews,setShowReviews]=useState(false);
   const [relatedProduct,setRelatedProduct]=useState('');
   const [rating,setRating]=useState('');
   const [comment,setComment]=useState('');
   const [showReviewModal,setShowReviewModal]=useState(false);
 
-  const favouriteList=useSelector((state)=>state.favourite.favouriteList);
+  
   const dispatch=useDispatch();
   
   const {productId}=useParams();
@@ -27,22 +31,30 @@ const ProductDetail = () => {
   const userInfo=JSON.parse(localStorage.getItem('userInfo'));
   const userId=userInfo?._id
 
+  //productApiSlice
   const {data:productDetail, refetch:refetchSingleProductDetail}=useFetchSingleProductQuery(productId);
   const [addReviewProdApiCall]=useAddProductReviewMutation();
+  
+
+  //favApiSlice
   const [addFavApiCall]=useAddFavMutation()
   const [deleteFavApiCall]=useDeleteFavMutation();
+  const {data:favData,refetch:refetchFavProduct}=useFetchFavQuery(userId)
+
+  //cartApiSlice
+  const userid=userId
+  const {data:cartProducts, refetch:refetchCartProducts}=useFetchCartProductsQuery(userid);
+  const [addToCartApiCall]=useAddCartProductMutation()
 
   let categoryId;
   let descriptionArray;
-
-
   if(productDetail){
     descriptionArray=productDetail.description.split("\n");
     categoryId=productDetail.category._id;
   }
-  
   const {data:relatedProducts, refetch:refetchRelatedProducts}=useFetchRelatedProductsQuery(categoryId);
-  const {data:favData,refetch:refetchFavProduct}=useFetchFavQuery(userId)
+ 
+  
 
   const addReviewProd = async () => {
 
@@ -84,17 +96,32 @@ const ProductDetail = () => {
     }
   }
   
+  const handleAddToCart=async()=>{
+    const productid=productId;
+    try {
+      await addToCartApiCall({userid,productid}).unwrap();
+      refetchCartProducts()
+      setIsCartProd(true); 
+    } catch (error) {
+      toast.error('unable to add this product')
+    }
+  }
   
   useEffect(()=>{
-    if(relatedProducts){
-        setRelatedProduct(relatedProducts)
-    }
+      refetchRelatedProducts();
+      setRelatedProduct(relatedProducts)
+      
+
     if(favData){
       dispatch(setFavList(favData));
       setIsFav(favData.some((fd)=>fd._id===productId))
     }
-    refetchFavProduct()
-  },[relatedProducts,favData,productId]);
+    if(cartProducts){
+      dispatch(setCartProducts(cartProducts));
+      setIsCartProd(cartProducts.some((cp)=>cp.product._id===productId))
+    }
+   
+  },[favData,productId,cartProducts]);
 
   if(!productDetail){
     return <Loader />
@@ -130,12 +157,25 @@ const ProductDetail = () => {
 
         <div className='grid grid-cols-3 gap-4'>
 
+        {isCartProd?
+        <Link to={'/cart'}
+        className="col-span-2 flex justify-center mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md">
+          <button
+          type='button'
+          >
+            Go to cart
+          </button>
+        </Link>
+        :
         <button
-          type="button"
-          className="col-span-2 mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
-        >
-          Add to cart
-        </button>
+          onClick={handleAddToCart}
+        type="button"
+        className="col-span-2 mt-8 px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold rounded-md"
+      >
+        Add to cart
+      </button>}
+
+        
         
         <FavouriteButton 
         setIsFav={setIsFav} 
@@ -216,14 +256,14 @@ const ProductDetail = () => {
           <Loader />
         ) : (
           relatedProduct.map((rp) => (
-            <div
-              key={rp._id}
-              className="w-62 md:w-96 flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl mb-7 mx-4">
+            <Link to={`/productdetail/${rp._id}`}
+            key={rp._id}
+            className="w-62 md:w-96 flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl mb-7 mx-4 border border-pink-600 ">
             
-              <div className="w-60 mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-48">
-                <Link to={`/productdetail/${rp._id}`}>
+              <div className=" w-60 mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl h-48">
+                
                   <img src={rp.image} alt={rp.name} className="object-cover w-full h-full" />
-                </Link>
+                
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
@@ -235,18 +275,13 @@ const ProductDetail = () => {
                   </p>
                 </div>
                 <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 hover:text-gray-200 opacity-75">
-                  {rp.description.slice(0, 20) + '...'}
+                  {rp.description.slice(0, 60) + '...'}
                 </p>
               </div>
-              <div className="flex justify-around p-6 pt-0">
-                <button
-                  className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-                  type="button"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
+              
+            
+            </Link>
+            
           ))
         )}
       </div>

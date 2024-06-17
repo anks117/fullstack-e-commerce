@@ -1,18 +1,22 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useDeleteFavMutation } from "../redux/api/favouriteApiSlice"
+import { useDeleteFavMutation, useFetchFavQuery } from "../redux/api/favouriteApiSlice"
 import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
-import { removeFavProduct} from "../redux/features/favourite/favouriteSlice"
+import { setFavList} from "../redux/features/favourite/favouriteSlice"
+import { useEffect } from "react"
 
 
 const Favourite = () => {
 
   const userInfo=JSON.parse(localStorage.getItem('userInfo'))
   const userId=userInfo._id
+  const dispatch=useDispatch(); 
+
   const [removeFavApiCall]=useDeleteFavMutation()
+  const {data:favList, refetch:refetchFavQuery}=useFetchFavQuery(userId);
   const totalFavourites=useSelector((state)=>state.favourite.totalFavourites);
   const favouriteList=useSelector((state)=>state.favourite.favouriteList)
-  const dispatch=useDispatch();
+  
 
   
 
@@ -20,13 +24,15 @@ const Favourite = () => {
     try {
       await removeFavApiCall({userId,productId:prod._id}).unwrap();
       toast.warning("Removed from favourite list")
-      dispatch(removeFavProduct(prod._id))
-
-      
+      refetchFavQuery();
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(()=>{
+      dispatch(setFavList(favList));
+  },[favList])
 
 
 
@@ -93,8 +99,8 @@ const Favourite = () => {
         
       </div>
       :
-      <div className="bg-gray-900 w-3/4 h-60 flex justify-center align-middle">
-        <h1 className="text-gray-100">Your Favourite list is Empty!</h1>
+      <div className="py-11 bg-stone-900 rounded-lg  w-full h-60 flex align-middle justify-center">
+        <h1 className="text-gray-100 text-2xl">Your Favourite list is Empty!</h1>
       </div>
         }
 
