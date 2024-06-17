@@ -38,7 +38,8 @@ router.get('/:userid',authenticate,async(req,res)=>{
                 name: acp.product.name,
                 image: acp.product.image,
                 brand: acp.product.brand,
-                description: acp.product.description
+                description: acp.product.description,
+                price:acp.product.price
             }
         }));
         res.status(200).json(cartProducts)

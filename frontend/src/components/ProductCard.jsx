@@ -5,32 +5,48 @@ import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from "../re
 import { useDispatch } from "react-redux";
 import { addFavProduct, removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice";
 import { Link } from 'react-router-dom';
+import { useAddCartProductMutation, useFetchCartProductsQuery } from "../redux/api/cartApiSlice";
+import { setCartProducts } from "../redux/features/cart/cartSlice";
 
 const ProductCard = ({ tp }) => {
   const [isFav, setIsFav] = useState(false);
+  const [isCartProd,setIsCartProd]=useState(false);
   const dispatch = useDispatch();
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const userId = userInfo?._id;
   const productId = tp._id;
-
+ 
+  // favApiSlice
   const { data: favData, refetch: refetchFavQuery } = useFetchFavQuery(userId);
+  const [addFavApiCall] = useAddFavMutation();
+  const [removeFavApiCall] = useDeleteFavMutation();
+
+  // cartApiSlice
+  const userid=userId
+  const {data:cartProduct, refetch:refetchCartProducts}=useFetchCartProductsQuery(userid);
+  const [addToCartProduct]=useAddCartProductMutation();
 
   useEffect(() => {
     if (favData) {
       dispatch(setFavList(favData));
       setIsFav(favData.some(fav => fav._id === productId));
     }
-    refetchFavQuery();
-  }, [favData, productId, dispatch]);
+    if(cartProduct){
+      dispatch(setCartProducts(cartProduct));
+      setIsCartProd(cartProduct.some(cp=>cp.product._id===productId));
+      console.log('cartproducts');
+    }
+    
+  }, [favData, productId,cartProduct]);
 
-  const [addFavApiCall] = useAddFavMutation();
-  const [removeFavApiCall] = useDeleteFavMutation();
+
 
   const handleRemoveFav = async () => {
     try {
       await removeFavApiCall({ userId, productId }).unwrap();
-      dispatch(removeFavProduct(productId));
+      
+      refetchFavQuery()
       setIsFav(false);
     } catch (error) {
       console.log(error);
@@ -40,12 +56,25 @@ const ProductCard = ({ tp }) => {
   const handleAddFav = async () => {
     try {
       await addFavApiCall({ userId, productId }).unwrap();
-      dispatch(addFavProduct(tp));
+     
+      refetchFavQuery();
       setIsFav(true);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleAddToCart=async()=>{
+    const userid=userId;
+    const productid=productId
+    try {
+      await addToCartProduct({userid,productid}).unwrap();
+      refetchCartProducts()
+      setIsCartProd(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-72 mb-7">
@@ -86,12 +115,23 @@ const ProductCard = ({ tp }) => {
         </p>
       </div>
       <div className="p-6 pt-0">
-        <button
+        {isCartProd?
+        <Link to={'/cart'}>
+          <button
           className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-          type="button"
-        >
-          Add to Cart
-        </button>
+        type="button"
+      >
+        Go to Cart
+      </button>
+        </Link>:
+        <button
+        onClick={handleAddToCart}
+        className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
+        type="button"
+      >
+        Add to Cart
+      </button>}
+        
       </div>
     </div>
   );

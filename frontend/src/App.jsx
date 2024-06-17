@@ -11,6 +11,7 @@ import Categorylist from './pages/admin/Categorylist'
 import Productlist from './pages/admin/Productlist'
 import Favourite from './pages/Favourite'
 import ProductDetail from './pages/ProductDetail'
+import CartPage from './pages/CartPage'
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
             <Route path='/favourite' element={<Favourite />}/>
+            <Route path='/cart' element={<CartPage /> }/>
           </Route>
 
           {/* admin routes */}
