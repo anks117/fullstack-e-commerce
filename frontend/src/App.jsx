@@ -12,6 +12,7 @@ import Productlist from './pages/admin/Productlist'
 import Favourite from './pages/Favourite'
 import ProductDetail from './pages/ProductDetail'
 import CartPage from './pages/CartPage'
+import ShopPage from './pages/ShopPage'
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/productdetail/:productId' element={<ProductDetail />} />
+          <Route path='/shop' element={<ShopPage />}/>
 
           {/* Protected routes  */}
           <Route element={<PrivateRoute />}>

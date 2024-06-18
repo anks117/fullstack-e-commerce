@@ -53,7 +53,7 @@ export const productApiSlice=apiSlice.injectEndpoints({
         }),
         fetchRelatedProducts:builder.query({
             query:(categoryId)=>({
-                url:`${PRODUCT_URL}/?categoryId=${categoryId}`
+                url:categoryId?`${PRODUCT_URL}/?categoryId=${categoryId}`:`${PRODUCT_URL}`
             })
         }),
         

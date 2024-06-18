@@ -96,7 +96,7 @@ router.get('/', async(req,res)=>{
             query.category=categoryId;
         }
     
-        const products=await Product.find(query).limit(6)
+        const products=await Product.find(query).limit()
         res.json(
             products
     )
