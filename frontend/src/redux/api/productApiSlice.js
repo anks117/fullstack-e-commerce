@@ -53,10 +53,29 @@ export const productApiSlice=apiSlice.injectEndpoints({
         }),
         fetchRelatedProducts:builder.query({
             query:(categoryId)=>({
-                url:categoryId?`${PRODUCT_URL}/?categoryId=${categoryId}`:`${PRODUCT_URL}`
+                url:`${PRODUCT_URL}/?categoryId=${categoryId}`
             })
         }),
-        
+        fetchFilterdProducts:builder.mutation({
+            query:({checked,checkedBrands,radio})=>({
+                url:`${PRODUCT_URL}/filterproducts`,
+                method:"POST",
+                body:({checked,checkedBrands,radio}),
+            })
+        }),
+        fetchInitialData:builder.query({
+            query:()=>({
+                url:`${PRODUCT_URL}/initialdata`
+            }),
+        }),
+
+        fetchBrandbyCategory:builder.mutation({
+            query:(checked)=>({
+                url:`${PRODUCT_URL}/getbrands`,
+                method:"POST",
+                body:checked,
+            })
+        })
     })
 })
 
@@ -69,5 +88,8 @@ export const {
     useFetchTopProductQuery,
     useFetchSingleProductQuery,
     useFetchRelatedProductsQuery,
-    useAddProductReviewMutation
+    useAddProductReviewMutation,
+    useFetchFilterdProductsMutation,
+    useFetchInitialDataQuery,
+    useFetchBrandbyCategoryMutation
 }=productApiSlice

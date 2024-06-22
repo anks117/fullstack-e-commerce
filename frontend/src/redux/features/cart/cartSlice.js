@@ -13,8 +13,8 @@ export const cartSlice=createSlice({
         
         setCartProducts:(state,action)=>{
             state.cartList=action.payload,
-            state.totalCartItems=state.cartList.length,
-            state.totalCartPrice=state.cartList.reduce((acc,item)=>item.quantity*item.product.price+acc,0)
+            state.totalCartItems=state.cartList?.length || 0,
+            state.totalCartPrice=state.cartList?.reduce((acc,item)=>item.quantity*item.product.price+acc,0) || 0
         }
     }
 })

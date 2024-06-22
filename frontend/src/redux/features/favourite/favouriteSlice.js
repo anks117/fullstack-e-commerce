@@ -19,7 +19,7 @@ export const favouriteSlice=createSlice({
         },
         setFavList:(state,action)=>{
             state.favouriteList=action.payload;
-            state.totalFavourites=state.favouriteList.length
+            state.totalFavourites=state.favouriteList?.length || 0
         }
 
     }
