@@ -71,22 +71,22 @@ router.post('/signin',async(req,res)=>{
     const body=req.body;
     const parsedbody=userSigninSchema.safeParse(body);
 
-    if(!parsedbody.success){
-        return res.json({msg:"invalid input provided"});
-    }
-
-    const userExist=await User.findOne({
-        email:body.email
-    })
-
-    if(!userExist){
-        return res.json({msg:"You don't have an account"})
-    }
-
-    const isMatch=await bcrypt.compare(body.password,userExist.password)
-    if(!isMatch){
-        return res.json({msg:"worng password"})
-    }
+    if (!parsedBody.success) {
+        return res.status(400).json({ message: "Invalid input provided" });
+      }
+    
+      const userExist = await User.findOne({
+        email: body.email
+      });
+    
+      if (!userExist) {
+        return res.status(400).json({ message: "You don't have an account" });
+      }
+    
+      const isMatch = await bcrypt.compare(body.password, userExist.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Wrong password" });
+      }
 
     const token=jwt.sign({
       userId:userExist._id  
@@ -100,7 +100,7 @@ router.post('/signin',async(req,res)=>{
     })
 
 
-    res.status(201).json({
+    res.status(200).json({
         _id: userExist._id,
         username: userExist.username,
         email: userExist.email,

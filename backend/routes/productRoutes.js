@@ -108,11 +108,21 @@ router.get('/', async(req,res)=>{
 
 router.get('/allproducts',authenticate, authorizeAdmin, async(req,res)=>{
     try {
-        const allProducts=await Product.find({}).populate("category").limit(12).sort({createAt:-1});
+        const allProducts=await Product.find({}).populate("category").sort({createAt:-1});
         res.json(allProducts);
 
     } catch (error) {
         res.status(500).json({error:"server error"})
+    }
+})
+
+router.get('/initialdata',async(req,res)=>{
+    try {
+        const allProducts=await Product.find({});
+        const allBrands=[...new Set(allProducts.map((ap)=>ap.brand))];
+        res.json({allProducts,allBrands})
+    } catch (error) {
+        res.json({err:error})
     }
 })
 
@@ -184,6 +194,46 @@ router.post('/:productid/review',authenticate, checkIdMiddleware ,async(req,res)
     }
     
 
+})
+
+router.post('/filterproducts',async(req,res)=>{
+    const {radio ,checkedBrands,checked}=req.body;
+
+   try{ 
+    let args={};
+
+    if(radio && radio.length){
+        args.price={$gte:radio[0], $lte:radio[1]}
+    }
+    if(checked && checked.length){
+        args.category={$in:checked}
+    }
+    if(checkedBrands && checkedBrands.length>0){
+        args.brand={ $in:checkedBrands }
+    }
+    
+    const filterProducts=await Product.find(args);
+    
+     res.json(filterProducts);
+    }catch(error){
+        res.json({error:"error"})
+    }
+})
+
+router.post('/getbrands',async(req,res)=>{
+    const {checked}=req.body
+    try {
+        let args={};
+        if(checked && checked.length>0){
+            args.category={ $in :checked}
+        }
+
+        const filteredProductsByCategory=await Product.find(args);
+        const filteredBrandbyCategory=[...new Set(filteredProductsByCategory.map((fp)=>fp.brand))]
+        res.json({filteredBrandbyCategory,filteredProductsByCategory});
+    } catch (error) {
+        res.json({error:error})
+    }
 })
 
 
