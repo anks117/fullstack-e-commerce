@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
 import { setFavList} from "../redux/features/favourite/favouriteSlice"
 import { useEffect } from "react"
+import { useAddCartProductMutation, useFetchCartProductsQuery } from "../redux/api/cartApiSlice"
+import { setCartProducts } from "../redux/features/cart/cartSlice"
 
 
 const Favourite = () => {
@@ -17,6 +19,9 @@ const Favourite = () => {
   const totalFavourites=useSelector((state)=>state.favourite.totalFavourites);
   const favouriteList=useSelector((state)=>state.favourite.favouriteList)
   
+  const [addToCartApiCall]=useAddCartProductMutation();
+  const userid=userId
+  const {data:cartProducts,refetch:refetchCartProducts}=useFetchCartProductsQuery(userid)
 
   
 
@@ -26,13 +31,41 @@ const Favourite = () => {
       toast.warning("Removed from favourite list")
       refetchFavQuery();
     } catch (error) {
-      console.error(error);
+      toast.error("error in removing");
+    }
+  }
+
+  const handleMoveToCart=async(userid,prod)=>{
+    const productid=prod._id
+    try {
+      await addToCartApiCall({userid,productid}).unwrap();
+      await removeFavApiCall({userId:userid,productId:prod._id}).unwrap();
+      toast.success('Moved to cart');
+      refetchCartProducts();
+      refetchFavQuery();
+      console.log('move to cart clicked')
+
+    } catch (error) {
+      toast.error('error in moving to cart');
     }
   }
 
   useEffect(()=>{
+    if(favList){
       dispatch(setFavList(favList));
-  },[favList])
+      console.log(favList)
+    }
+    if(cartProducts){
+      dispatch(setCartProducts(cartProducts))
+      console.log(cartProducts);
+    }
+      
+  },[favList,cartProducts])
+
+ 
+   
+    
+  
 
 
 
@@ -87,9 +120,10 @@ const Favourite = () => {
                 </button>
 
                 <button
+                onClick={()=>handleMoveToCart(userId,prod)}
                   className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1 px-2 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-auto bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
                   type="button">
-                  Add to Cart
+                  Move to Cart
                 </button>
               </div>
             </div>

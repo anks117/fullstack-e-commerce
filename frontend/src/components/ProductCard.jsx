@@ -3,8 +3,8 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { useAddFavMutation, useDeleteFavMutation, useFetchFavQuery } from "../redux/api/favouriteApiSlice";
 import { useDispatch } from "react-redux";
-import { addFavProduct, removeFavProduct, setFavList } from "../redux/features/favourite/favouriteSlice";
-import { Link } from 'react-router-dom';
+import { setFavList } from "../redux/features/favourite/favouriteSlice";
+import { Link, useNavigate } from 'react-router-dom';
 import { useAddCartProductMutation, useFetchCartProductsQuery } from "../redux/api/cartApiSlice";
 import { setCartProducts } from "../redux/features/cart/cartSlice";
 
@@ -26,6 +26,7 @@ const ProductCard = ({ tp }) => {
   const userid=userId
   const {data:cartProduct, refetch:refetchCartProducts}=useFetchCartProductsQuery(userid);
   const [addToCartProduct]=useAddCartProductMutation();
+  const navigate=useNavigate();
 
   useEffect(() => {
     if (favData) {
@@ -55,10 +56,15 @@ const ProductCard = ({ tp }) => {
 
   const handleAddFav = async () => {
     try {
-      await addFavApiCall({ userId, productId }).unwrap();
-     
-      refetchFavQuery();
-      setIsFav(true);
+
+      if(userInfo){
+        await addFavApiCall({ userId, productId }).unwrap();
+        refetchFavQuery();
+        setIsFav(true);
+      }else{
+        navigate('/login')
+      }
+      
     } catch (error) {
       console.log(error);
     }
@@ -68,9 +74,14 @@ const ProductCard = ({ tp }) => {
     const userid=userId;
     const productid=productId
     try {
-      await addToCartProduct({userid,productid}).unwrap();
-      refetchCartProducts()
-      setIsCartProd(true);
+      if(userInfo){
+        await addToCartProduct({userid,productid}).unwrap();
+        refetchCartProducts()
+        setIsCartProd(true);
+      }else{
+        navigate('/login')
+      }
+      
     } catch (error) {
       console.log(error);
     }
@@ -104,7 +115,7 @@ const ProductCard = ({ tp }) => {
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
           <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-            {tp.name}
+            {tp.name.slice(0,20)}
           </p>
           <p className="block font-sans rounded-3xl p-3 bg-pink-500 text-base antialiased font-medium leading-relaxed text-gray-100">
             ₹{tp.price}

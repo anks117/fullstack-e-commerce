@@ -1,5 +1,5 @@
 
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAddProductReviewMutation, useFetchRelatedProductsQuery, useFetchSingleProductQuery } from '../redux/api/productApiSlice';
 import Loader from '../components/Loader';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ const ProductDetail = () => {
   const [isCartProd,setIsCartProd]=useState(false);
 
   const [showReviews,setShowReviews]=useState(false);
-  const [relatedProduct,setRelatedProduct]=useState('');
+  
   const [rating,setRating]=useState('');
   const [comment,setComment]=useState('');
   const [showReviewModal,setShowReviewModal]=useState(false);
@@ -27,6 +27,8 @@ const ProductDetail = () => {
   const dispatch=useDispatch();
   
   const {productId}=useParams();
+
+  const navigate=useNavigate();
 
   const userInfo=JSON.parse(localStorage.getItem('userInfo'));
   const userId=userInfo?._id
@@ -64,10 +66,12 @@ const ProductDetail = () => {
     };
     
     try {
+
       await addReviewProdApiCall({ productid:productId, review }).unwrap();
       toast.success("Review added");
       setShowReviewModal(false);
       refetchSingleProductDetail();
+     
     } catch (error) {
       toast.error(error?.data?.message || error?.data?.msg);
     }
@@ -75,10 +79,14 @@ const ProductDetail = () => {
 
   const addThisFavProduct=async()=>{
     try {
-      await addFavApiCall({userId,productId}).unwrap();
-      dispatch(addFavProduct(productDetail));
-      refetchFavProduct();
-      setIsFav(true);
+      if(userInfo){
+        await addFavApiCall({userId,productId}).unwrap();
+        dispatch(addFavProduct(productDetail));
+        refetchFavProduct();
+        setIsFav(true);
+      }else{
+        navigate('/login')
+      }
 
     } catch (error) {
       toast.error('error in adding fav')
@@ -99,17 +107,30 @@ const ProductDetail = () => {
   const handleAddToCart=async()=>{
     const productid=productId;
     try {
-      await addToCartApiCall({userid,productid}).unwrap();
-      refetchCartProducts()
-      setIsCartProd(true); 
+      if(userInfo){
+        await addToCartApiCall({userid,productid}).unwrap();
+        refetchCartProducts()
+        setIsCartProd(true); 
+      }else{
+        navigate('/login');
+      }
+      
     } catch (error) {
       toast.error('unable to add this product')
     }
   }
+
+  const handleIsVisibleReviewModal=()=>{
+    if(userInfo){
+      setShowReviewModal(true)
+    }else{
+      navigate('/login');
+    }
+    
+  }
   
   useEffect(()=>{
       refetchRelatedProducts();
-      setRelatedProduct(relatedProducts)
       
 
     if(favData){
@@ -134,7 +155,7 @@ const ProductDetail = () => {
   <div className="p-4 lg:max-w-5xl max-w-96 mx-auto">
     <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-6 max-lg:gap-12">
       <div className="w-full lg:sticky top-0 sm:flex justify-center lg:justify-start gap-2">
-        <img src={productDetail.image} alt="Product" className="h-96 rounded-md object-cover" />
+        <img src={productDetail.image} alt="Product" className="h-96 min-w-full rounded-md object-cover" />
       </div>
       <div>
         <h2 className="text-2xl font-bold text-gray-100">
@@ -198,7 +219,7 @@ const ProductDetail = () => {
           <h3 className="text-xl font-bold text-gray-100">Reviews({productDetail.reviews.length})</h3>
 
           <button className='p-1 rounded-md bg-pink-600 text-white shadow-sm'
-          onClick={()=>setShowReviewModal(true)}>
+          onClick={handleIsVisibleReviewModal}>
             Add review
           </button>
           </div>
@@ -252,10 +273,10 @@ const ProductDetail = () => {
         <hr className="w-60 md:w-1/3 border-1 border-solid border-pink-700" />
       </div>
       <div className="md:w-full flex overflow-x-scroll ">
-        {!relatedProduct ? (
+        {!relatedProducts ? (
           <Loader />
         ) : (
-          relatedProduct.map((rp) => (
+          relatedProducts.map((rp) => (
             <Link to={`/productdetail/${rp._id}`}
             key={rp._id}
             className="w-62 md:w-96 flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl mb-7 mx-4 border border-pink-600 ">
