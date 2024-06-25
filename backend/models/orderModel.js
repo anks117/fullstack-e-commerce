@@ -16,7 +16,7 @@ const orderSchema=new mongoose.Schema({
             quantity:{type:Number,required:true},
             product:{
                 type:mongoose.Schema.Types.ObjectId,
-                ref:Product,
+                ref:'Product',
                 required:true
             }
         }
@@ -25,7 +25,7 @@ const orderSchema=new mongoose.Schema({
     shippingAddress:{
         address:{type:String,required:true},
         city:{type:String,required:true},
-        postalCode:{type:number,required:true},
+        postalCode:{type:Number,required:true},
         country:{type:String,required:true},
     },
 
