@@ -89,7 +89,7 @@ const Categorylist = () => {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="bg-zinc-900 border border-pink-700 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-700 block w-full p-2.5 dark:bg-pink-700 dark:border-pink-600 dark:placeholder-pink-400 dark:text-white focus:ring-pink-700 focus:border-pink-700"
+                            className="bg-zinc-900 border border-pink-700 text-white text-sm rounded-lg  focus:ring-pink-500  focus:border-pink-700 block w-full p-2.5 dark:bg-pink-700 dark:border-pink-600 dark:placeholder-pink-400 dark:text-white focus:ring-pink-700 focus:border-pink-700"
                             placeholder="category name"
                             required
                         />

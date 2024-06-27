@@ -71,7 +71,7 @@ router.post('/signin',async(req,res)=>{
     const body=req.body;
     const parsedbody=userSigninSchema.safeParse(body);
 
-    if (!parsedBody.success) {
+    if (!parsedbody.success) {
         return res.status(400).json({ message: "Invalid input provided" });
       }
     
