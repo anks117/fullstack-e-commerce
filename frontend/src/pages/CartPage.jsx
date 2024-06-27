@@ -1,4 +1,4 @@
-import { Link} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import { useAddCartProductMutation, useDeleteCartProductMutation, useFetchCartProductsQuery } from '../redux/api/cartApiSlice'
 import { useEffect } from 'react';
 import { setCartProducts } from '../redux/features/cart/cartSlice';
@@ -10,6 +10,7 @@ const CartPage = () => {
   const dispatch=useDispatch();
   const userInfo=JSON.parse(localStorage.getItem('userInfo'))
   const userid=userInfo._id
+  const navigate=useNavigate();
 
   // cartApiSlice
   const {data:cartProducts, refetch:refetchCartProducts}=useFetchCartProductsQuery(userid);
@@ -128,28 +129,20 @@ const CartPage = () => {
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-300 ">Original price</dt>
+                        <dt className="text-base font-normal text-gray-300 ">Items price</dt>
                         <dd className="text-base font-medium text-gray-100">₹⁫{totalCartPrice}</dd>
                       </dl>
 
-                      <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-300">Store Pickup</dt>
-                        <dd className="text-base font-medium text-gray-100 ">₹{totalCartPrice>0 && '99⁫⁫'}</dd>
-                      </dl>
-
-                      <dl className="flex items-center justify-between gap-4">
-                        <dt className="text-base font-normal text-gray-300">Tax</dt>
-                        <dd className="text-base font-medium text-gray-100">₹⁫⁫⁫⁫⁫⁫⁫⁫ {totalCartItems*100}</dd>
-                      </dl>
+                      
                     </div>
 
                     <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                       <dt className="text-base font-bold text-gray-300">Total</dt>
-                      <dd className="text-base font-bold text-gray-100">₹⁫⁫⁫⁫⁫⁫⁫⁫ {totalCartPrice>0? totalCartPrice+99+totalCartItems*100:'0'}</dd>
+                      <dd className="text-base font-bold text-gray-100">₹⁫⁫⁫⁫⁫⁫⁫⁫ {totalCartPrice}</dd>
                     </dl>
                   </div>
 
-                  <a href="#" className="flex w-full items-center justify-center rounded-lg bg-pink-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 ">Proceed to Checkout</a>
+                  <button onClick={()=>navigate('/shipping')} className="flex w-full items-center justify-center rounded-lg bg-pink-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-pink-800 focus:outline-none focus:ring-4 focus:ring-pink-300 ">Proceed to Checkout</button>
 
                   <div className="flex items-center justify-center gap-2">
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400"> or </span>

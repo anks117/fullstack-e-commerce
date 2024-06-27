@@ -75,4 +75,14 @@ router.delete('/:cpid',authenticate,async(req,res)=>{
     return res.status(400).json({msg:'already not present'});
 })
 
+router.delete('/',authenticate,async(req,res)=>{
+    const userId=req.user._id;
+    try {
+        await Cart.deleteMany({user:userId});
+        res.json("all products removed from cart");
+    } catch (error) {
+        res.status(400).json({msg:error});
+    }
+})
+
 export default router;

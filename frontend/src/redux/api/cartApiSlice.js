@@ -20,8 +20,14 @@ import { apiSlice } from "./apiSlice";
                 url:`${CART_URL}/${cpid}`,
                 method:"DELETE"
             })
+        }),
+        removeAllCartProducts:builder.mutation({
+            query:()=>({
+                url:`${CART_URL}`,
+                method:"DELETE"
+            })
         })
     })
 })
 
-export  const {useAddCartProductMutation,useDeleteCartProductMutation, useFetchCartProductsQuery}=cartApiSlice
+export  const {useAddCartProductMutation,useDeleteCartProductMutation, useFetchCartProductsQuery, useRemoveAllCartProductsMutation}=cartApiSlice
