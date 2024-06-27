@@ -4,19 +4,11 @@ import Product from '../models/productModel.js';
 import Order from '../models/orderModel.js';
 const router=express.Router();
 
-function calTaxAndPrice(totalPrice){
-    const shippingPrice=totalPrice>2000?100:30
-    const taxRate=0.15;
-    const taxPrice=totalPrice*taxRate.toFixed(2);
-    const grandTotal=totalPrice+shippingPrice+taxPrice
-    return{
-        taxPrice,shippingPrice,grandTotal
-    }
-}
+
 
 router.post('/',authenticate, async(req,res)=>{
 
-    const {orderItems,shippingAddress,totalPrice}=req.body;
+    const {orderItems,shippingAddress,totalPrice,grandTotalPrice,taxPrice,shippingPrice}=req.body;
 
     if(orderItems.length<=0){
        return  res.status(400).json({message:"no items"})
@@ -43,7 +35,7 @@ router.post('/',authenticate, async(req,res)=>{
             }
         })
 
-        const {taxPrice,shippingPrice,grandTotal}=calTaxAndPrice(totalPrice);
+        
         const newOrder=await Order.create({
             user:req.user._id,
             orderItems:dbOrderItems,
@@ -51,7 +43,7 @@ router.post('/',authenticate, async(req,res)=>{
             shippingPrice,
             taxPrice,
             itemPrice:totalPrice,
-            totalPrice:grandTotal
+            totalPrice:grandTotalPrice
         })
 
         res.status(200).json(newOrder);
