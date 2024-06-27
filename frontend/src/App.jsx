@@ -13,6 +13,9 @@ import Favourite from './pages/Favourite'
 import ProductDetail from './pages/ProductDetail'
 import CartPage from './pages/CartPage'
 import ShopPage from './pages/ShopPage'
+import ShippingPage from './pages/ShippingPage'
+import SummaryPage from './pages/SummaryPage'
+import Order from './pages/Order'
 
 
 function App() {
@@ -40,6 +43,9 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/favourite' element={<Favourite />}/>
             <Route path='/cart' element={<CartPage /> }/>
+            <Route path='/shipping' element={<ShippingPage />} />
+            <Route path='/summary' element={<SummaryPage />}/>
+            <Route path='/order/:orderId' element={<Order />}/>
           </Route>
 
           {/* admin routes */}
