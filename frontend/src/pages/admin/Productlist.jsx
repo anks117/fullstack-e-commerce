@@ -222,8 +222,8 @@ const Productlist = () => {
                 </div>
 
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-100 dark:text-gray-400">
-                        <thead className="text-xs text-pink-600 uppercase dark:bg-gray-700 dark:text-gray-400">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-100 ">
+                        <thead className="text-xs text-pink-600 uppercase ">
                             <tr>
                                 <th scope="col" className="px-6 py-3">Product</th>
                                 <th scope="col" className="px-6 py-3">Brand</th>
@@ -234,8 +234,8 @@ const Productlist = () => {
                         </thead>
                         <tbody>
                             {allProducts?.length > 0 && allProducts.map((product) => (
-                                <tr key={product._id} className=" border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-pink-500 dark:hover:bg-gray-600">
-                                    <th scope="row" className="flex items-center px-6 py-4 text-gray-100 whitespace-nowrap dark:text-white">
+                                <tr key={product._id} className=" border-b  hover:bg-pink-500 ">
+                                    <th scope="row" className="flex items-center px-6 py-4 text-gray-100 whitespace-nowrap">
                                        <img className="w-10 h-10 object-cover" src={product.image} alt={product.name} />
                                         <div className="ps-3">
                                             <div className="text-base font-semibold">{product.name}</div>
@@ -248,7 +248,7 @@ const Productlist = () => {
                                     <td className="px-6 py-4">
                                         <button
                                             onClick={() => handleToggleEditModal(product)}
-                                            className="font-medium text-blue-600 dark:text-blue-500 hover:cursor-pointer"
+                                            className="font-medium text-blue-600  hover:cursor-pointer"
                                         >
                                             Edit
                                         </button>

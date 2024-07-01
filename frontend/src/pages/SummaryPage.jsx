@@ -69,34 +69,34 @@ const SummaryPage = () => {
                   <div>
                     <input type="text"
                       value={userInfo.username}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
                   <div>
                     <input type="email"
                       value={userInfo.email}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
                   <div>
                     <input type="text"
                       value={shippingAddress.address}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
                   <div>
                     <input type="text"
                       value={shippingAddress.city}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
                   
                   <div>
                     <input type="number"
                       value={shippingAddress.postalCode}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
 
                   <div>
                     <input type="text"
                       value={shippingAddress.country}
-                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" />
+                      className="px-2 pb-2 bg-stone-800 text-gray-100 w-full text-sm border-b border-gray-300 outline-none" readOnly/>
                   </div>
                 </div>
               </div>

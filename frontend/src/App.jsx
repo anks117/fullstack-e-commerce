@@ -16,6 +16,7 @@ import ShopPage from './pages/ShopPage'
 import ShippingPage from './pages/ShippingPage'
 import SummaryPage from './pages/SummaryPage'
 import Order from './pages/Order'
+import Myorders from './pages/Myorders'
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
             <Route path='/shipping' element={<ShippingPage />} />
             <Route path='/summary' element={<SummaryPage />}/>
             <Route path='/order/:orderId' element={<Order />}/>
+            <Route path='/user-orders' element={<Myorders />}/>
           </Route>
 
           {/* admin routes */}
