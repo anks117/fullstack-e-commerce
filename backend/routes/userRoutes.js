@@ -185,6 +185,16 @@ router.put('/profile',authenticate,async(req,res)=>{
 
 })
 
+router.get('/total-users',authenticate,authorizeAdmin,async(req,res)=>{
+    try {
+        const totalUsers=await User.countDocuments();
+        res.status(200).json(totalUsers)
+        
+    } catch (error) {
+        res.status(404).json({msg:"error in getting all "})
+    }
+})
+
 router.delete('/:id',authenticate,authorizeAdmin,async(req,res)=>{
     const id=req.params.id;
     const userExist=await User.findById(id);
@@ -215,6 +225,8 @@ router.get('/:id',authenticate,authorizeAdmin, async(req,res)=>{
         throw new Error("user not found");
     }
 })
+
+
 
 
 export default router;

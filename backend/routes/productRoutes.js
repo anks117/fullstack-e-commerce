@@ -146,6 +146,15 @@ router.get('/new', async(req,res)=>{
     }
 })
 
+router.get('/total-products',authenticate,authorizeAdmin,async(req,res)=>{
+    try {
+        const totalProducts=await Product.countDocuments();
+        res.status(200).json(totalProducts);
+    } catch (error) {
+        res.status(404).json({msg:"error in getting total number of products"})
+    }
+})
+
 router.get('/:productid',async(req,res)=>{
     try {
         const product=await Product.findById(req.params.productid).populate('category');

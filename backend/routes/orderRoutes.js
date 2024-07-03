@@ -91,7 +91,7 @@ router.get('/totalsales',authenticate,authorizeAdmin,async(req,res)=>{
 router.get('/totalOrders',authenticate,authorizeAdmin,async(req,res)=>{
     try {
         const totalOrders=await Order.countDocuments();
-        res.status(200).json({totalOrders})
+        res.status(200).json(totalOrders)
     } catch (error) {
         res.status(400).json({message:error});
     }
