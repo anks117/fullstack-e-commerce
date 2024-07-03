@@ -75,6 +75,11 @@ export const productApiSlice=apiSlice.injectEndpoints({
                 method:"POST",
                 body:checked,
             })
+        }),
+        getTotalProducts:builder.query({
+            query:()=>({
+                url:`${PRODUCT_URL}/total-products`
+            })
         })
     })
 })
@@ -91,5 +96,6 @@ export const {
     useAddProductReviewMutation,
     useFetchFilterdProductsMutation,
     useFetchInitialDataQuery,
-    useFetchBrandbyCategoryMutation
+    useFetchBrandbyCategoryMutation,
+    useGetTotalProductsQuery
 }=productApiSlice

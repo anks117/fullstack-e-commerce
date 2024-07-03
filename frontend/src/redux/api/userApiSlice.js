@@ -49,6 +49,11 @@ export const userApiSlice=apiSlice.injectEndpoints({
                 url:`${USER_URL}/${id}`,
                 keepUnusedDataFor:5,
             })
+        }),
+        getTotalUsers:builder.query({
+            query:()=>({
+                url:`${USER_URL}/total-users`
+            })
         })
     })
 })
@@ -60,4 +65,5 @@ export const {
     useProfileMutation, 
     useDeleteUsersMutation, 
     useGetUsersQuery, 
-    useGetUserDetailsQuery }=userApiSlice
+    useGetUserDetailsQuery,
+    useGetTotalUsersQuery }=userApiSlice

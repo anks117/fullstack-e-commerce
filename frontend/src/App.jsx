@@ -17,6 +17,8 @@ import ShippingPage from './pages/ShippingPage'
 import SummaryPage from './pages/SummaryPage'
 import Order from './pages/Order'
 import Myorders from './pages/Myorders'
+import OrderPage from './pages/admin/OrderPage'
+import Dashboards from './pages/admin/Dashboards'
 
 
 function App() {
@@ -55,6 +57,8 @@ function App() {
             <Route path='/admin/userlist' element={<Userlist />} />
             <Route path='/admin/category' element={<Categorylist />} />
             <Route path='/admin/productlist' element={<Productlist />} />
+            <Route path='/admin/orderlist' element={<OrderPage />}/>
+            <Route path='/admin/dashboard' element={<Dashboards />}/>
           </Route>
         </Routes>
       </div>
