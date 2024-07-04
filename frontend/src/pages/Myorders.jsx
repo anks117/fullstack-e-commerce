@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 import { useGetMyOrderQuery } from "../redux/api/orderApiSlice"
+import { useEffect } from "react";
 
 
 const Myorders = () => {
 
-    const {data:myOrders}=useGetMyOrderQuery();
+    const {data:myOrders , refetch:refetchMyOrders}=useGetMyOrderQuery();
+
+    useEffect(()=>{
+        refetchMyOrders();
+    },[])
 
   return (
     
@@ -16,9 +21,17 @@ const Myorders = () => {
 
                 
             </div>
+            {!myOrders && 
+                    <div className='mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl'>
+                    <h1 className='text-white text-2xl'>Your Order list is empty!</h1>
+                    </div> }
 
             <div className="mt-6 flow-root sm:mt-8">
-                <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                <div className="divide-y divide-gray-200">
+
+                    
+
+
                     {myOrders?.map((order)=>{
                         return (
                             <div key={order._id} className="flex flex-wrap items-center gap-y-4 py-6">

@@ -64,7 +64,7 @@ const CartPage = () => {
 
                       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                         <div className="w-20 shrink-0 md:order-1">
-                          <img className="h-20 w-20 dark:hidden" src={cl.product.image} alt={cl.product.name} />
+                          <img className="h-20 w-20 " src={cl.product.image} alt={cl.product.name} />
                           
                         </div>
 

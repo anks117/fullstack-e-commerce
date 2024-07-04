@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import BarChart from '../../components/BarChart'
-import { useGetAllOrdersQuery, useGetTotalOrdersQuery, useGetTotalSalesByDateQuery, useGetTotalSalesQuery } from '../../redux/api/orderApiSlice'
+import {  useGetTotalOrdersQuery, useGetTotalSalesByDateQuery, useGetTotalSalesQuery } from '../../redux/api/orderApiSlice'
 import { Link } from 'react-router-dom'
 import { useGetTotalUsersQuery } from '../../redux/api/userApiSlice';
 import { useGetTotalProductsQuery } from '../../redux/api/productApiSlice';
@@ -35,7 +35,7 @@ const Dashboards = () => {
                 backgroundColor:["rgba(23,127,23,1)"]
             }]
         })
-        console.log('run');
+        console.log(totalSalesbyDate);
     },[totalSalesbyDate,refetchTotalSalesbyDate])
 
     useEffect(()=>{

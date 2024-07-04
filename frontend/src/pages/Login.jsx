@@ -30,10 +30,12 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-center min-h-screen flex items-center justify-center" style={{ backgroundImage: 'url("https://images.pexels.com/photos/11396009/pexels-photo-11396009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
+    <div className='mt-12 md:mt-0  flex items-center justify-center'>
+    <div className="bg-center h-56 w-72 md:h-screen md:w-10/12 flex items-center justify-center" style={{ 
+      backgroundImage: 'url("https://images.pexels.com/photos/11396009/pexels-photo-11396009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
       <div className="absolute bg-black opacity-50 backdrop-filter backdrop-blur-lg"></div>
       <ToastContainer />
-      <div className='flex justify-center'>
+      <div className='mt-28 md:mb-36 flex items-center'>
         <div className="bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 rounded-lg mr-[4rem] mt-[5rem] p-6">
           <h1 className='text-2xl font-semibold mb-4'>Sign-in</h1>
           <form onSubmit={handleSubmit} className='container w-[20rem]'>
@@ -58,6 +60,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

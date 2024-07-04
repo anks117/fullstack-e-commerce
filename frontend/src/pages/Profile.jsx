@@ -54,9 +54,9 @@ const Profile = () => {
     return (
         <div>
             <ToastContainer />
-      <div className="container p-4 mt-[5rem] ">
+      <div className="container  mt-[5rem] ">
         <div className="flex justify-center align-center">
-          <div className="md:w-1/3">
+          <div className="w-10/12 md:w-1/3">
             <h2 className="text-2xl font-semibold mb-4">Update Profile</h2>
             {loadingUpdateProfile? <Loader />:
               <form onSubmit={submitHandler}>

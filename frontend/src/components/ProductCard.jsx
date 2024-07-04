@@ -101,13 +101,13 @@ const ProductCard = ({ tp }) => {
         {isFav ? (
           <FaHeart
             onClick={handleRemoveFav}
-            className="absolute text-white top-2 right-2"
+            className="absolute text-pink-600 top-2 right-2"
             size={25}
           />
         ) : (
           <CiHeart
             onClick={handleAddFav}
-            className="absolute text-white top-2 right-2"
+            className="absolute text-pink-600 top-2 right-2"
             size={25}
           />
         )}

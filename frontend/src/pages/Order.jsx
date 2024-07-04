@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom"
-import { useGetOrderDetailsQuery } from '../redux/api/orderApiSlice'
+import { useGetOrderDetailsQuery, useOrderPayMutation } from '../redux/api/orderApiSlice'
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 const Order = () => {
   const {orderId}=useParams();
   const {data:orderDetails, refetch:refetchOrderDetails} =useGetOrderDetailsQuery(orderId);
+  const [orderPayApiCall]=useOrderPayMutation()
 
   const [date,setDate]=useState('');
   const [time,setTime]=useState('');
@@ -26,6 +27,15 @@ const Order = () => {
 
     setDate(`${day.toString()}-${month.toString()}-${year.toString()}`);
     setTime(`${hrs.toString()}:${min.toString()}`)
+  }
+
+  const handlePay=async()=>{
+    try {
+        await orderPayApiCall(orderId).unwrap();
+        toast.success("Payment Done !");
+    } catch (error) {
+        toast.error('unable to pay')
+    }
   }
 
   useEffect(()=>{
@@ -128,7 +138,9 @@ const Order = () => {
                                 
                                 </div> :
                                 <div className="w-full flex justify-center items-center">
-                                <button className=" bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-800 py-5 w-96 md:w-full text-base font-medium leading-4 text-white">Pay now</button>
+                                <button 
+                                onClick={handlePay}
+                                className=" bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-800 py-5 w-96 md:w-full text-base font-medium leading-4 text-white">Pay now</button>
                                 </div>}
                             
                         </div>
