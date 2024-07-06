@@ -1,7 +1,7 @@
 import express from "express";
 import zod from 'zod';
 import User from "../models/userModel.js";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { authenticate, authorizeAdmin } from "../middleware/authMiddleware.js";
 

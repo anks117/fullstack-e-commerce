@@ -69,7 +69,7 @@ router.put('/:categoryId',authenticate, authorizeAdmin, async(req,res)=>{
 
 })
 
-router.get('/', authenticate, authorizeAdmin, async(req,res)=>{
+router.get('/', async(req,res)=>{
 
     const allCategory=await Category.find({});
     res.json(allCategory);

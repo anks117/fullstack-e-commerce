@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -18,7 +18,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon backend/index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "echo 'No build step required'"
   },
   "keywords": [],
   "author": "",
