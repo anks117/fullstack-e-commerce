@@ -21,7 +21,7 @@ const ProgressStep = ({step1,step2,step3}) => {
             className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-green-500">
             Step 1
           </h6>
-          <p className="block font-sans text-base antialiased font-normal leading-relaxed text-green-500">
+          <p className="hidden md:block font-sans text-base antialiased font-normal leading-relaxed text-green-500">
             Login
           </p>
         </div>
@@ -39,7 +39,7 @@ const ProgressStep = ({step1,step2,step3}) => {
             className={`block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal  ${step1 && step2 && step3? "text-green-500":"text-white"}`}>
             Step 2
           </h6>
-          <p className={`block font-sans text-base antialiased font-normal leading-relaxed ${step1 && step2 && step3? "text-green-500":"text-white"}`}>
+          <p className={`hidden md:block font-sans text-base antialiased font-normal leading-relaxed ${step1 && step2 && step3? "text-green-500":"text-white"}`}>
             Shipping Address
           </p>
         </div>
@@ -56,7 +56,7 @@ const ProgressStep = ({step1,step2,step3}) => {
             ${step1 && step2 && step3?"text-white":"text-gray-700"} `}>
             Step 3
           </h6>
-          <p className={`block font-sans text-base antialiased font-normal leading-relaxed  ${step1 && step2 && step3?"text-white":"text-gray-700"} `}>
+          <p className={`hidden md:block font-sans text-base antialiased font-normal leading-relaxed  ${step1 && step2 && step3?"text-white":"text-gray-700"} `}>
             Summary
           </p>
         </div>

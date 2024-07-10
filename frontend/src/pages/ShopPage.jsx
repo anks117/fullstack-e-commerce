@@ -74,38 +74,33 @@ const ShopPage = () => {
 
     const hanldePagination=(selectedPage)=>{
         if(selectedPage >=1 && selectedPage <=Math.ceil(products?.length/9) && selectedPage !==page) 
+        {
             setPage(selectedPage);
+        }
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        })
+            
+
     }
 
     useEffect(()=>{
         fetchInitialData()
-    },[data?.allProducts,data?.allBrands,allCategory,page])
+    },[data?.allProducts,data?.allBrands,allCategory])
 
     
 
     return (
-        <div className="relative">
-            <div className="flex justify-center">
-                ShopPage
-            </div>
-            <div  className="flex justify-center flex-wrap">
-            {products && products?.slice(page*9-9,9*page).map((tp)=>{
-                return(
-                    <div key={tp._id}>
-                        <ProductCard tp={tp}/>
-                    </div>
-                )
-            })}
-
-                <div className="absolute top-7 right-5">
+        <div className="">
+            <div className="absolute top-5 right-5">
                     {showFilter ?
                         <MdCancel size={30} className="cursor-pointer text-pink-600 hover:text-pink-700" onClick={() => setShowFilter(false)} /> :
                         <FaFilter size={25} className="cursor-pointer text-pink-600 hover:text-pink-700" onClick={() => setShowFilter(true)} />
                     }
                 </div>
-            </div>
-            
-            <div className="absolute top-16 right-4">
+                <div className="absolute top-16 right-4">
                 <FilterComponent showFilter={showFilter}
                     category={category}
                     handleBrandsCheckbox={handleBrandsCheckbox}
@@ -114,8 +109,22 @@ const ShopPage = () => {
                     brands={brands}
                     applyFilter={applyFilter}
                 />
+                </div>
+            
+            <div  className="flex md:justify-evenly flex-wrap">
+            {products && products?.slice(page*9-9,9*page).map((tp)=>{
+                return(
+                    <div key={tp._id} className="mt-16">
+                        <ProductCard tp={tp}/>
+                    </div>
+                )
+            })}
+
+                
             </div>
-            <div className="flex justify-center">
+            
+            
+            <div className="py-10 flex justify-center">
             <nav aria-label="Page navigation">
                 <ul className="flex items-center -space-x-px h-8 text-sm">
                     <li>

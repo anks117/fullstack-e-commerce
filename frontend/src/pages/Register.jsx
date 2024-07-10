@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useSignupMutation } from "../redux/api/userApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../redux/features/auth/authSlice";
@@ -30,62 +30,56 @@ const Register = () => {
     }
 
   return (
-    <div className='mt-12 md:mt-0  flex items-center justify-center'>
-      <div className="bg-center h-80 w-72 md:h-screen md:w-10/12 flex items-center justify-center " style={{ backgroundImage: 'url("https://images.pexels.com/photos/11396009/pexels-photo-11396009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
-        <div className="absolute bg-black opacity-50 backdrop-filter backdrop-blur-lg"></div>
-          
-      <div className='mt-28 md:mb-36 flex items-center'>
-          <div className="bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 rounded-lg mr-[4rem] mt-[5rem] p-6 ">
-              <h1 className='text-2xl font-semibold mb-4'>
-                  Sign-up
-              </h1>
+    <div className="bg-cover bg-center bg-fixed" style={{backgroundImage: "url('https://images.pexels.com/photos/11396009/pexels-photo-11396009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')"}}>
+      <ToastContainer />
+    <div className="h-screen flex justify-center items-center">
+        <div className="bg-white bg-opacity-10 backdrop-blur-md mx-4 p-8 rounded-md shadow-md w-full md:w-1/2 lg:w-1/3">
+            <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
+            <form onSubmit={handleSubmit}>
 
-              <form onSubmit={handleSubmit} className='container w-[20rem]'>
-              <div className='my-[2rem]'>
-                      <label htmlFor="name" className='block text-sm font-medium text-white'>
-                          First Name
-                      </label>
-                      <input type="text" placeholder='name' className='mt-1 p-2 border rounded w-full' value={username} onChange={(e)=>setUsername(e.target.value)}/>
-                  </div>
-                  <div className='my-[2rem]'>
-                      <label htmlFor="email" className='block text-sm font-medium text-white'>
-                          Email
-                      </label>
-                      <input type="email" placeholder='email' className='mt-1 p-2 border rounded w-full' value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                  </div>
-                  <div className='my-[2rem]'>
-                      <label htmlFor="password" className='block text-sm font-medium text-white'>
-                          Password
-                      </label>
-                      <input type="password" placeholder='password' className='mt-1 p-2 border rounded w-full'
-                      value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                  </div>
-
-                  <button  disabled={isLoading}
-                type="submit"
-                className="bg-pink-700 text-white px-4 py-2 rounded cursor-pointer my-[1rem]">
-                      {isLoading ? "Registering..." : "Register"}
-                  </button>
-                  {isLoading && <Loader />}
-              </form>
-
-              <div className="mt-4">
-              <p className="text-white">
-                Already have an account?{" "}
-                <Link
-                  to={"/login"}
-                  className="text-pink-700 hover:underline"
-                >
-                  Login
-                </Link>
-              </p>
-            </div>
-          </div>
-
-
-      </div>
-      </div>
+                <div className="mb-4">
+                    <label className="block font-semibold text-gray-100 mb-2" >
+                        Username
+                    </label>
+                    <input
+                      onChange={(e)=>setUsername(e.target.value)}
+                      value={username}
+                        className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="email" type="text" placeholder="Enter your name" />
+                </div>
+                <div className="mb-4">
+                    <label className="block font-semibold text-gray-100 mb-2" >
+                        Email Address
+                    </label>
+                    <input
+                      onChange={(e)=>setEmail(e.target.value)}
+                      value={email}
+                        className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="email" type="email" placeholder="Enter your email address" />
+                </div>
+                <div className="mb-4">
+                    <label className="block font-semibold text-gray-100 mb-2">
+                        Password
+                    </label>
+                    <input
+                        onChange={(e)=>setPassword(e.target.value)}
+                        value={password}
+                        className="border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        id="password" type="password" placeholder="Enter your password" />
+                    <span className="text-gray-600 hover:text-gray-800">Already have an account? <Link to={'/login'} className='text-pink-600'>Login</Link></span>
+                </div>
+                <div className="mb-6">
+                  {isLoading?<Loader/>:<button
+                        className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit">
+                        Login
+                    </button>}
+                    
+                </div>
+            </form>
+        </div>
     </div>
+</div>
   )
 }
 

@@ -8,8 +8,8 @@ import mainRouter from './routes/index.js'
 
 const app=express();
 app.use(express.json());
-app.use(express.static('dist'))
 app.use(express.urlencoded({extended:true}))
+app.use(express.static('dist'));
 app.use(cookieParser());
 app.use(cors({
     origin: '*',  // Allow all origins

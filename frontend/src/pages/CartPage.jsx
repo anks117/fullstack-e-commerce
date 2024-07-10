@@ -50,8 +50,9 @@ const CartPage = () => {
     <div>
       <ToastContainer />
         <section className=" py-8 antialiased md:py-16">
-          <div className="max-w-screen-md ">
-            <h2 className="text-xl font-semibold text-pink-600 dark:text-white sm:text-2xl">Shopping Cart</h2>
+          <h2 className="text-lg md:text-xl font-semibold text-pink-600  md:text-2xl">Shopping Cart</h2>
+          <div className="max-w-screen-md flex justify-center">
+            
 
             <div className="mt-6 sm:mt-8 md:gap-4 lg:flex lg:items-start xl:gap-4">
               {totalCartItems>0?
@@ -60,7 +61,7 @@ const CartPage = () => {
                 {cartList && cartList.map((cl)=>{
                   return(
                     <div key={cl._id} 
-                    className="rounded-lg border border-pink-600 p-4 shadow-sm  md:p-6">
+                    className="rounded-sm  p-6  hover:shadow-pink-400 shadow-lg  md:p-6">
 
                       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                         <div className="w-20 shrink-0 md:order-1">

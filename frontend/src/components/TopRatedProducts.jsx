@@ -13,14 +13,14 @@ const TopRatedProducts = ({topProducts}) => {
     <div className="max-w-full m-auto py-4 px-4 relative">
 
       <div className='flex flex-col justify-start p-4'>
-        <h1 className='text-2xl'> Special Products</h1>
-        <hr className='w-1/3 border-1 border-solid border-pink-700'/>
+        <h1 className='text-lg md:text-2xl'> Special Products</h1>
+        <hr className='w-40 md:w-1/3 border-1 border-solid border-pink-700'/>
       </div>
 
-      <div className="flex flex-row flex-wrap justify-evenly">
+      <div className="flex justify-evenly flex-wrap">
         {topProducts.map((tp)=>{
             return(
-                <div key={tp._id}>
+                <div key={tp._id} className="mt-10">
                     <ProductCard  
                     tp={tp}
                     />

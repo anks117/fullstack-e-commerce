@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../redux/api/userApiSlice';
 import { logout } from '../redux/features/auth/authSlice';
+import { BiSolidLogInCircle } from "react-icons/bi";
+import { FaUserEdit } from "react-icons/fa";
 
 
 const Navigation = () => {
@@ -32,6 +34,7 @@ const Navigation = () => {
         try {
             await logoutApiCall().unwrap();
             dispatch(logout());
+            toggleSidebar()
             navigate('/login');
         } catch (error) {
             console.error(error);
@@ -48,7 +51,7 @@ const Navigation = () => {
                 data-drawer-toggle="sidebar-multi-level-sidebar"
                 aria-controls="sidebar-multi-level-sidebar"
                 type="button"
-                className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
             >
                 <span className="sr-only">Open sidebar</span>
                 <svg
@@ -68,9 +71,9 @@ const Navigation = () => {
             
                 <aside
                     id="sidebar-multi-level-sidebar"
-                    className={`fixed top-0 left-0 z-40 w-60 h-screen transition-transform transform ${
+                    className={`fixed top-0 left-0 z-40 w-48 h-full transition-transform transform ${
                         showSidebar ? 'translate-x-0 z-40 ' : '-translate-x-full '
-                    } sm:translate-x-0`}
+                    }`}
                     aria-label="Sidebar"
                 >
                     <div className="h-full px-3 py-4 overflow-y-auto bg-stone-900">
@@ -79,7 +82,7 @@ const Navigation = () => {
                     <button
                         onClick={toggleSidebar}
                         type="button"
-                        className="inline-flex items-center p-2 mt-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-pink-700 dark:focus:ring-pink-600"
+                        className="inline-flex items-center p-2 mt-2 text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-pink-700 dark:focus:ring-pink-600"
                     >
                         <span className="sr-only">Close sidebar</span>
                         <svg
@@ -101,6 +104,7 @@ const Navigation = () => {
                         <ul className="space-y-2 font-medium ">
                             <li>
                                 <Link
+                                    onClick={toggleSidebar}
                                     to={'/'}
                                     className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-pink-700 dark:hover:bg-gray-700 group"
                                 >
@@ -118,6 +122,7 @@ const Navigation = () => {
 
                             <li>
                                 <Link
+                                    onClick={toggleSidebar}
                                     to={'/shop'}
                                     className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-pink-700 dark:hover:bg-gray-700 group"
                                 >
@@ -131,6 +136,7 @@ const Navigation = () => {
 
                             <li>
                                 <Link
+                                    onClick={toggleSidebar}
                                     to={'/cart'}
                                     className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-pink-700 dark:hover:bg-gray-700 group"
                                 >
@@ -155,6 +161,7 @@ const Navigation = () => {
 
                             <li>
                                 <Link
+                                    onClick={toggleSidebar}
                                     to={'/favourite'}
                                     className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-pink-700 dark:hover:bg-gray-700 group"
                                 >
@@ -216,15 +223,16 @@ const Navigation = () => {
                                         </button>
 
                                         {dropdownOpen && (
-                                            <ul className="py-2 space-y-2">
+                                            <ul className="mt-6 space-y-1">
                                                 {userInfo.isAdmin && (
                                                     <>
                                                         <li>
                                                             <Link
+                                                                onClick={toggleSidebar}
                                                                 to={
                                                                     '/admin/dashboard'
                                                                 }
-                                                                className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                                className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:hover:bg-pink-700"
                                                             >
                                                                 Dashboard
                                                             </Link>
@@ -232,10 +240,11 @@ const Navigation = () => {
 
                                                         <li>
                                                             <Link
+                                                                onClick={toggleSidebar}
                                                                 to={
                                                                     '/admin/productlist'
                                                                 }
-                                                                className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                                className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                             >
                                                                 Product
                                                             </Link>
@@ -243,10 +252,11 @@ const Navigation = () => {
 
                                                         <li>
                                                             <Link
+                                                                onClick={toggleSidebar}
                                                                 to={
                                                                     '/admin/orderlist'
                                                                 }
-                                                                className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                                className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                             >
                                                                 Orders
                                                             </Link>
@@ -254,10 +264,11 @@ const Navigation = () => {
 
                                                         <li>
                                                             <Link
+                                                                onClick={toggleSidebar}
                                                                 to={
                                                                     '/admin/category'
                                                                 }
-                                                                className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                                className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                             >
                                                                 Category
                                                             </Link>
@@ -265,10 +276,11 @@ const Navigation = () => {
 
                                                         <li>
                                                             <Link
+                                                                onClick={toggleSidebar}
                                                                 to={
                                                                     '/admin/userlist'
                                                                 }
-                                                                className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                                className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                             >
                                                                 Users
                                                             </Link>
@@ -278,8 +290,9 @@ const Navigation = () => {
 
                                                 <li>
                                                     <Link
+                                                        onClick={toggleSidebar}
                                                         to={'/profile'}
-                                                        className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                        className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                     >
                                                         Profile
                                                     </Link>
@@ -287,7 +300,7 @@ const Navigation = () => {
                                                 <li>
                                                     <button
                                                         onClick={logoutHandler}
-                                                        className="flex items-center w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700 dark:text-white dark:hover:bg-pink-700"
+                                                        className="flex items-center text-sm w-full p-2 text-gray-50 transition duration-75 rounded-lg pl-11 group hover:bg-pink-700  dark:hover:bg-pink-700"
                                                     >
                                                         Logout
                                                     </button>
@@ -302,18 +315,11 @@ const Navigation = () => {
                                     <>
                                         <li>
                                     <Link
+                                        onClick={toggleSidebar}
                                         to={'/login'}
                                         className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-pink-700 group"
                                     >
-                                        <svg
-                                            className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            viewBox="0 0 18 18"
-                                        >
-                                            <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                                        </svg>
+                                        <BiSolidLogInCircle size={20}/>
                                         <span className="flex-1 ms-3 whitespace-nowrap">
                                             Login
                                         </span>
@@ -321,18 +327,11 @@ const Navigation = () => {
                                 </li>
                                 <li>
                                     <Link
+                                        onClick={toggleSidebar}
                                         to={'/register'}
                                         className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-pink-700 group"
                                     >
-                                        <svg
-                                            className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-                                        </svg>
+                                        <FaUserEdit size={20}/>
                                         <span className="flex-1 ms-3 whitespace-nowrap">
                                             Register
                                         </span>

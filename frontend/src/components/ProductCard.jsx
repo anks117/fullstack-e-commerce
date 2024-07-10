@@ -88,64 +88,51 @@ const ProductCard = ({ tp }) => {
   }
 
   return (
-    <div className="relative flex flex-col text-gray-100 hover:cursor-pointer hover:shadow-lg bg-clip-border rounded-xl w-72 mb-7">
-      <div className={`relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white bg-clip-border rounded-xl 
-        h-80`}>
-        <Link to={`/productdetail/${productId}`}>
-          <img
-            src={tp.image}
-            alt={tp.name}
-            className="object-cover w-full h-full"
-          />
-        </Link>
+    <div className="sm:max-w-96 max-w-60 md:max-w-xs mx-auto rounded overflow-hidden transition-all duration-500  hover:shadow-pink-300 shadow-md hover:shadow-lg">
+    <div className="relative">
+      <Link to={`/productdetail/${tp._id}`}>
+        <img className="w-full md:h-48" src={tp.image} alt={tp.name}/>
+      </Link>
         {isFav ? (
           <FaHeart
             onClick={handleRemoveFav}
-            className="absolute text-pink-600 top-2 right-2"
+            className="absolute cursor-pointer text-pink-600 top-2 right-2"
             size={25}
           />
         ) : (
           <CiHeart
             onClick={handleAddFav}
-            className="absolute text-pink-600 top-2 right-2"
+            className="absolute cursor-pointer text-pink-600 top-2 right-2"
             size={25}
           />
         )}
-      </div>
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-2">
-          <p className="block font-sans text-base antialiased font-medium leading-relaxed text-blue-gray-900">
-            {tp.name.slice(0,20)}
-          </p>
-          <p className="block font-sans rounded-3xl p-3 bg-pink-500 text-base antialiased font-medium leading-relaxed text-gray-100">
-            ₹{tp.price}
-          </p>
-        </div>
-        <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700 hover:text-gray-200 opacity-75">
-          {tp.description.slice(0, 80) + '...'}
+    </div>
+    <div className="p-4">
+        <h3 className="text-lg font-medium mb-2">{tp.name.slice(0,15)}</h3>
+        <p className="text-gray-600 text-sm mb-4">
+        {tp.description.slice(0, 60) + '...'}
         </p>
-      </div>
-      <div className="p-6 pt-0">
-        {isCartProd?
-        <Link to={'/cart'}>
+        <div className="flex items-center justify-between">
+            <span className="font-bold text-sm md:text-lg">&#8377;{tp.price}</span>
+            {isCartProd?
+            <Link to={'/cart'} className="bg-pink-500 hover:bg-pink-600  text-white font-bold py-2 px-2 md:px-4 rounded">
+            Go to cart
+          </Link>
+          :
           <button
-          className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-        type="button"
-      >
-        Go to Cart
-      </button>
-        </Link>:
-        <button
-        onClick={handleAddToCart}
-        className="align-middle bg-pink-700 select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg shadow-pink-950 hover:shadow-pink-950 focus:opacity-[0.85] active:opacity-[0.85] active:shadow-none block w-full bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:scale-105 hover:shadow-none focus:scale-105 focus:shadow-none active:scale-100"
-        type="button"
-      >
-        Add to Cart
-      </button>}
-        
-      </div>
+              onClick={handleAddToCart}
+            className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-2 md:px-4 rounded">
+            Add to cart
+          </button>
+            }
+            
+        </div>
+    </div>
     </div>
   );
 };
 
 export default ProductCard;
+
+
+

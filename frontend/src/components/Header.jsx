@@ -22,21 +22,21 @@ const Header = ({ newProducts }) => {
   };
 
   return (
-    <div className="max-w-full h-[30rem] m-auto py-4 px-4 relative group">
+    <div className="max-w-full h-80 md:h-[30rem] m-auto py-4 px-4 relative group">
       <div className='flex flex-col justify-start p-4'>
-        <h1 className='text-2xl'> Our New Products</h1>
-        <hr className='w-1/3 border-2 border-solid border-pink-700'/>
+        <h1 className='text-lg  md:text-2xl'> Our New Products</h1>
+        <hr className='w-44 md:w-1/3 border-2 border-solid border-pink-700'/>
       </div>
       
       <div
         style={{ backgroundImage: `url(${newProducts[currIndex].image})` }} 
         className='w-full h-full rounded-2xl bg-center bg-cover bg-no-repeat duration-500'
       >
-        <div className='absolute fixed bottom-2 flex flex-col space-y-7 p-7'>
-          <span className='text-xl text-white'>{newProducts[currIndex].name}</span>
-          <span className='text-xl text-white'>{newProducts[currIndex].description.slice(0, 50)}...</span>
+        <div className='absolute bottom-2 flex flex-col space-y-7 p-7'>
+          <span className='text-xl text-gray-400'>{newProducts[currIndex].name}</span>
+          <span className='hidden md:inline-block text-xl text-gray-400'>{newProducts[currIndex].description.slice(0, 50)}...</span>
           <Link to={`/productdetail/${newProducts[currIndex]._id}`}>
-            <button className="text-white inline-flex items-center bg-pink-600 hover:bg-pink-800 font-medium rounded-3xl text-sm px-5 py-2.5 text-center">
+            <button className="absolute bottom-0 text-white inline-flex items-center bg-pink-600 hover:bg-pink-800 font-medium rounded-3xl text-sm px-3 py-2 md:px-5 md:py-2.5 text-center">
               See more
             </button>
           </Link>

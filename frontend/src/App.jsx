@@ -27,13 +27,10 @@ function App() {
   return (
     <BrowserRouter>
     <div className="flex">
-
-      <div className='md:w-60'>
+      
         <Navigation />
-      </div>
       
-      
-      <div className="flex-1 p-4">
+      <div className="flex-1 justify-center md:px-8">
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<Login />} />

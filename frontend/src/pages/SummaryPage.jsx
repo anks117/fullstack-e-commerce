@@ -58,7 +58,7 @@ const SummaryPage = () => {
     <div className="font-[sans-serif]  mt-28">
       <div className="max-lg:max-w-full mx-auto w-full">
         <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 max-lg:order-1 p-6 !pr-0 max-w-4xl mx-auto w-full">
+          <div className="lg:col-span-2 max-lg:order-1 md:p-6 !pr-0 max-w-4xl mx-auto w-60 md:w-full">
             
 
             <form className="lg:mt-16">
@@ -114,7 +114,7 @@ const SummaryPage = () => {
             </form>
           </div>
 
-          <div className="bg-zinc-900 lg:h-screen lg:sticky lg:top-0">
+          <div className="bg-zinc-900 max-w-64 sm:w-80 lg:h-screen lg:sticky lg:top-0">
             <div className="relative h-full">
               <div className="p-6 overflow-auto max-lg:max-h-[400px] lg:h-[calc(100vh-160px)] max-lg:mb-8">
                 <h2 className="text-xl font-semibold text-pink-600 ">Order Summary</h2>

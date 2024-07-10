@@ -34,10 +34,10 @@ export const cartSlice=createSlice({
             state.shippingPrice=state.totalCartPrice>2000?200:100 || 0,
             localStorage.setItem("shippingPrice",JSON.stringify(state.shippingPrice))
 
-            state.taxPrice=state.totalCartPrice*0.15.toFixed(2) || 0;
+            state.taxPrice=(state.totalCartPrice*0.15).toFixed(2) || 0;
             localStorage.setItem("taxPrice",JSON.stringify(state.taxPrice))
 
-            state.grandTotalPrice=state.taxPrice+state.shippingPrice+state.totalCartPrice || 0;
+            state.grandTotalPrice=Number(state.taxPrice)+Number(state.shippingPrice)+Number(state.totalCartPrice) || 0;
             localStorage.setItem("grandTotalPrice",JSON.stringify(state.grandTotalPrice))
 
            

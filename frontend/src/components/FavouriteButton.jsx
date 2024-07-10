@@ -20,14 +20,14 @@ const FavouriteButton = ({setIsFav,isFav,addThisFavProduct,removeThisFavProduct}
              onClick={handleRemoveFavProd}
              className="flex justify-center w-full mt-8 px-3 py-3 border border-pink-600 hover:border-pink-800 text-white text-sm font-semibold rounded-md">
                  <FaHeart size={20} className="text-pink-700 " />
-                 <span className="ml-2">Favourite</span>
+                 <span className="hidden md:inline-block ml-2">Favourite</span>
              </button>
              :
             <button 
             onClick={handleAddFavProd}
             className=" flex justify-center w-full mt-8 px-3 py-3 border border-pink-600 hover:border-pink-800 text-white text-sm font-semibold rounded-md">
                 <CiHeart size={20}/>
-                <span className="ml-2">Favourite</span>
+                <span className="hidden md:inline-block ml-2">Favourite</span>
             </button>  
            
         }
